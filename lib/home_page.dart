@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:code_pioneers/best_routes_page.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,7 +7,6 @@ import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
-  
 
   final startLocationController = TextEditingController().obs;
   final destinationLocationController = TextEditingController();
@@ -21,7 +21,7 @@ class HomePage extends StatelessWidget {
   final currentLat = ''.obs;
   final currentLong = ''.obs;
   final placeName = ''.obs;
-  bool widget = true;
+  final bool widget = true;
 
   @override
   Widget build(BuildContext context) {
@@ -173,9 +173,23 @@ class HomePage extends StatelessWidget {
                   ),
                   child: ElevatedButton(
                     onPressed: () async {
-
-                      fetchCoordinates();
-
+                      if (startLocationController.value.text.isEmpty) {
+                        Get.snackbar("Error", 'ادخل نقطة البداية');
+                      } else if (destinationLocationController
+                          .value
+                          .text
+                          .isEmpty) {
+                        Get.snackbar("Error", 'ادخل وجهتك ');
+                      } else if (startLocationController
+                              .value
+                              .text
+                              .isNotEmpty &&
+                          destinationLocationController.value.text.isNotEmpty) {
+                        fetchCoordinates();
+                        Get.to(BestRoutsPage());
+                      } else {
+                        Get.snackbar('Error', 'هناك مشكلة في الوقت الحالي ');
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: widget
