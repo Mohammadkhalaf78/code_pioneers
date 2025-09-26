@@ -118,6 +118,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.0.0"
+  flutter_selectable_cards:
+    dependency: "direct main"
+    description:
+      name: flutter_selectable_cards
+      sha256: "4b82674c4096d9bb69ee0dba023008ab67aabe947847eb0c04198de326c01ea7"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
