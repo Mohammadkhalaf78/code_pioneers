@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:code_pioneers/services/location_services.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -7,6 +6,7 @@ import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({super.key});
+  
 
   final startLocationController = TextEditingController().obs;
   final destinationLocationController = TextEditingController();
@@ -173,7 +173,9 @@ class HomePage extends StatelessWidget {
                   ),
                   child: ElevatedButton(
                     onPressed: () async {
+
                       fetchCoordinates();
+
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: widget
