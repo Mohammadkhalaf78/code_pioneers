@@ -1,5 +1,4 @@
-import 'package:code_pioneers/best_routes_page.dart';
-import 'package:code_pioneers/home_page.dart';
+import 'package:code_pioneers/pages/plan_trip_page.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: PlanTripPage(),
     );
   }
 }
