@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:code_pioneers/best_routes_page.dart';
+import 'package:code_pioneers/best_route_page.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -186,7 +186,7 @@ class HomePage extends StatelessWidget {
                               .isNotEmpty &&
                           destinationLocationController.value.text.isNotEmpty) {
                         fetchCoordinates();
-                        Get.to(BestRoutsPage());
+                        Get.to(BestRoutePage());
                       } else {
                         Get.snackbar('Error', 'هناك مشكلة في الوقت الحالي ');
                       }
