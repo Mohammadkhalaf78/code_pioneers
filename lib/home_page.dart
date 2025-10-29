@@ -303,27 +303,6 @@ class HomePage extends StatelessWidget {
     placeName.value =
         '${place.first.locality.toString()}:${place.first.subAdministrativeArea.toString()}';
 
-    // final url = Uri.parse(
-    //   // 'geo:0.0?q${position.latitude},${position.longitude}',
-    //   'geo:0.0?q=${position.latitude},${position.longitude}',
-    // );
-    // launchUrl(url);
-
-    // show addrass
-    // final places =await placemarkFromCoordinates(
-    //   position.latitude,
-    //   position.longitude,
-    // );
-    // print('${places.first.name}, ${places.first.street}, ${places.first.locality}');
-
-    // final Uri url = Uri.parse(
-    //   'https://www.google.com/maps/search/?api=1&query=${position.latitude},${position.longitude}',
-    // );
-
-    // if (await canLaunchUrl(url)) {
-    //   await launchUrl(url, mode: LaunchMode.externalApplication);
-    // } else {
-    //   throw 'Could not launch $url';
-    // }
+  
   }
 }
