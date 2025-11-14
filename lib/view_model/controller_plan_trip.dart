@@ -1,4 +1,3 @@
-
 import 'package:code_pioneers/Constants/colors.dart';
 import 'package:code_pioneers/coordiantes.dart';
 import 'package:dartx/dartx.dart';
@@ -19,12 +18,13 @@ class ControllerPlanTrip extends GetxController {
   final currentLat = ''.obs;
   final currentLong = ''.obs;
   final placeName = ''.obs;
-  final coords = [].obs;
+  final coords = <Coordiantes>[].obs;
   double dist = 0;
+  final distancekkm = [].obs;
 
   Future<RxList> fetchCoordinates() async {
     coords.clear();
-    coords.clear();
+
     for (final element in addPlace) {
       try {
         final locations = await locationFromAddress(element);
@@ -46,31 +46,43 @@ class ControllerPlanTrip extends GetxController {
   }
 
   Future<RxList> getDistance() async {
+    distancekkm.clear();
     if (currentLat.value.isEmpty || currentLong.value.isEmpty) {
       return coords;
     }
-
-    final double curLat = currentLat.value.toDouble();
-    final double curLong = currentLong.value.toDouble();
-
     for (var i = 0; i < coords.length; i++) {
       final element = coords[i];
+
       final meters = Geolocator.distanceBetween(
-        curLat,
-        curLong,
+        currentLat.value.toDouble(),
+        currentLong.value.toDouble(),
         element.latitude,
         element.longitude,
       );
+
       final km = meters / 1000;
       final formattedKm = double.parse(km.toStringAsFixed(1));
 
-      coords.add(formattedKm);
-
-      // coords[i] = element;
-      print(coords);
+      element.distanceKm = formattedKm;
     }
 
     return coords;
+  }
+
+  void bastway() {
+    // 1. استخدام map لتحويل قائمة الكائنات إلى قائمة مسافات (double)
+    final distancesList = coords
+        .map(
+          (coordinate) => coordinate.distanceKm!,
+        ) // ✅ الوصول إلى الخاصية distanceKm
+        .toList();
+
+    final shortest = distancesList.min();
+
+
+
+    // 2. الآن لديك قائمة من الأرقام، يمكنك تطبيق `.min` عليها.
+    // ... الخطوة التالية ...
   }
 
   Future<void> getLocation() async {
@@ -125,3 +137,14 @@ class ControllerPlanTrip extends GetxController {
     startLocationController.value.text = placeName.value;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
