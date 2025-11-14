@@ -551,6 +551,133 @@
 //   return route; // تعيد المسار المحسوب
 // }
 
+// import 'package:code_pioneers/Constants/colors.dart';
+// import 'package:code_pioneers/coordiantes.dart';
+// import 'package:dartx/dartx.dart';
+// import 'package:flutter/widgets.dart';
+// import 'package:geocoding/geocoding.dart';
+// import 'package:geolocator/geolocator.dart';
+// import 'package:get/get.dart';
+
+// class ControllerPlanTrip extends GetxController {
+//   final color = ColorsConst();
+
+//   final addPlace = <String>[].obs;
+
+//   final controllerAddPlace = TextEditingController();
+
+//   final startLocationController = TextEditingController().obs;
+
+//   final currentLat = ''.obs;
+//   final currentLong = ''.obs;
+//   final placeName = ''.obs;
+//   final coords = [].obs;
+//   double dist = 0;
+
+//   Future<RxList> fetchCoordinates() async {
+//     coords.clear();
+//     coords.clear();
+//     for (final element in addPlace) {
+//       try {
+//         final locations = await locationFromAddress(element);
+//         if (locations.isNotEmpty) {
+//           final loc = locations.first;
+//           coords.add(
+//             Coordiantes(
+//               placeName: element,
+//               latitude: loc.latitude,
+//               longitude: loc.longitude,
+//             ),
+//           );
+//         }
+//       } catch (e) {
+//         Get.snackbar('failed', 'for $element: $e');
+//       }
+//     }
+//     return coords;
+//   }
+
+//   Future<RxList> getDistance() async {
+//     if (currentLat.value.isEmpty || currentLong.value.isEmpty) {
+//       return coords;
+//     }
+
+//     final double curLat = currentLat.value.toDouble();
+//     final double curLong = currentLong.value.toDouble();
+
+//     for (var i = 0; i < coords.length; i++) {
+//       final element = coords[i];
+//       final meters = Geolocator.distanceBetween(
+//         curLat,
+//         curLong,
+//         element.latitude,
+//         element.longitude,
+//       );
+//       final km = meters / 1000;
+//       final formattedKm = double.parse(km.toStringAsFixed(1));
+
+//       coords.add(formattedKm);
+
+//       // coords[i] = element;
+//       print(coords);
+//     }
+
+//     return coords;
+//   }
+
+//   Future<void> getLocation() async {
+//     bool serviceEnabled;
+//     LocationPermission permission;
+
+//     // Test if location services are enabled.
+//     serviceEnabled = await Geolocator.isLocationServiceEnabled();
+//     if (!serviceEnabled) {
+//       // Location services are not enabled don't continue
+//       // accessing the position and request users of the
+//       // App to enable the location services.
+//       Get.snackbar("Error", 'Location services are disabled.');
+//       return;
+//     }
+//     permission = await Geolocator.checkPermission();
+//     if (permission == LocationPermission.denied) {
+//       permission = await Geolocator.requestPermission();
+//       if (permission == LocationPermission.denied) {
+//         // Permissions are denied, next time you could try
+//         // requesting permissions again (this is also where
+//         // Android's shouldShowRequestPermissionRationale
+//         // returned true. According to Android guidelines
+//         // your App should show an explanatory UI now.
+//         Get.snackbar('Error', 'location permissions are denied');
+//         return;
+//       }
+//     }
+
+//     if (permission == LocationPermission.deniedForever) {
+//       // Permissions are denied forever, handle appropriately.
+//       Get.snackbar(
+//         'Error ',
+//         'location permissions are permanently denied, we cannot request permissions.',
+//       );
+//       return;
+//     }
+
+//     // When we reach here, permissions are granted and we can
+//     // continue accessing the position of the device.
+//     final position = await Geolocator.getCurrentPosition();
+//     currentLat.value = position.latitude.toString();
+//     currentLong.value = position.longitude.toString();
+
+//     final place = await placemarkFromCoordinates(
+//       position.latitude,
+//       position.longitude,
+//     );
+//     placeName.value =
+//         '${place.first.locality.toString()}:${place.first.subAdministrativeArea.toString()}';
+
+//     startLocationController.value.text = placeName.value;
+//   }
+// }
+
 import 'package:code_pioneers/Constants/colors.dart';
 import 'package:code_pioneers/coordiantes.dart';
 import 'package:dartx/dartx.dart';
@@ -571,17 +698,21 @@ class ControllerPlanTrip extends GetxController {
   final currentLat = ''.obs;
   final currentLong = ''.obs;
   final placeName = ''.obs;
-  final coords = [].obs;
-  double dist = 0;
 
-  Future<RxList> fetchCoordinates() async {
+  final coords = <Coordiantes>[].obs;
+
+  // ---------------------------------------------------------
+  // 1) تحويل أسماء الأماكن إلى إحداثيات
+  // ---------------------------------------------------------
+  Future<RxList<Coordiantes>> fetchCoordinates() async {
     coords.clear();
-    coords.clear();
+
     for (final element in addPlace) {
       try {
         final locations = await locationFromAddress(element);
         if (locations.isNotEmpty) {
           final loc = locations.first;
+
           coords.add(
             Coordiantes(
               placeName: element,
@@ -594,76 +725,136 @@ class ControllerPlanTrip extends GetxController {
         Get.snackbar('failed', 'for $element: $e');
       }
     }
-    return coords;
-  }
 
-  Future<RxList> getDistance() async {
-    if (currentLat.value.isEmpty || currentLong.value.isEmpty) {
-      return coords;
-    }
-
-    final double curLat = currentLat.value.toDouble();
-    final double curLong = currentLong.value.toDouble();
-
-    for (var i = 0; i < coords.length; i++) {
-      final element = coords[i];
-      final meters = Geolocator.distanceBetween(
-        curLat,
-        curLong,
-        element.latitude,
-        element.longitude,
-      );
-      final km = meters / 1000;
-      final formattedKm = double.parse(km.toStringAsFixed(1));
-
-      coords.add(formattedKm);
-
-      // coords[i] = element;
-      print(coords);
+    print("Coordinates fetched:");
+    for (var c in coords) {
+      print("${c.placeName}: (${c.latitude}, ${c.longitude})");
     }
 
     return coords;
   }
 
+  // ---------------------------------------------------------
+  // 2) حساب المسار الأمثل: ترتيب الأماكن حسب أقرب مسافة
+  // ---------------------------------------------------------
+  Future<List<Coordiantes>> sortByNearestPath({String? startLocation}) async {
+    double curLat;
+    double curLong;
+
+    // حفظ الإحداثيات الأولية لطباعة المسافة الأولى بشكل صحيح
+    double startLat, startLong;
+
+    if (startLocation != null && startLocation.isNotEmpty) {
+      try {
+        final locs = await locationFromAddress(startLocation);
+        if (locs.isNotEmpty) {
+          curLat = locs.first.latitude;
+          curLong = locs.first.longitude;
+        } else {
+          curLat = currentLat.value.isNotEmpty ? double.parse(currentLat.value) : 0;
+          curLong = currentLong.value.isNotEmpty ? double.parse(currentLong.value) : 0;
+        }
+      } catch (e) {
+        curLat = currentLat.value.isNotEmpty ? double.parse(currentLat.value) : 0;
+        curLong = currentLong.value.isNotEmpty ? double.parse(currentLong.value) : 0;
+      }
+    } else {
+      if (currentLat.value.isEmpty || currentLong.value.isEmpty) {
+        print("Current location is empty, cannot sort. Please call getLocation() first.");
+        return coords;
+      }
+      curLat = double.parse(currentLat.value);
+      curLong = double.parse(currentLong.value);
+    }
+
+    // نسخ البداية
+    startLat = curLat;
+    startLong = curLong;
+
+    List<Coordiantes> remaining = List.from(coords);
+    List<Coordiantes> ordered = [];
+
+    print("Starting sorting process...");
+
+    while (remaining.isNotEmpty) {
+      remaining.sort((a, b) {
+        double distA = Geolocator.distanceBetween(curLat, curLong, a.latitude, a.longitude);
+        double distB = Geolocator.distanceBetween(curLat, curLong, b.latitude, b.longitude);
+        return distA.compareTo(distB);
+      });
+
+      final nearest = remaining.first;
+      ordered.add(nearest);
+
+      print("Nearest place selected: ${nearest.placeName} at (${nearest.latitude}, ${nearest.longitude})");
+
+      curLat = nearest.latitude;
+      curLong = nearest.longitude;
+
+      remaining.remove(nearest);
+    }
+
+    coords.value = ordered;
+
+    print("Final ordered list of places:");
+    for (var i = 0; i < ordered.length; i++) {
+      double dist;
+      if (i == 0) {
+        // استخدم إحداثيات البداية الحقيقية
+        dist = Geolocator.distanceBetween(
+          startLat,
+          startLong,
+          ordered[i].latitude,
+          ordered[i].longitude,
+        );
+      } else {
+        dist = Geolocator.distanceBetween(
+          ordered[i - 1].latitude,
+          ordered[i - 1].longitude,
+          ordered[i].latitude,
+          ordered[i].longitude,
+        );
+      }
+
+      print("${i + 1}. ${ordered[i].placeName} (${ordered[i].latitude}, ${ordered[i].longitude}) - Distance from previous: ${dist.toStringAsFixed(2)} meters");
+    }
+
+    return ordered;
+  }
+
+  // ---------------------------------------------------------
+  // 3) جلب اللوكيشن الحقيقي للموبايل
+  // ---------------------------------------------------------
   Future<void> getLocation() async {
     bool serviceEnabled;
     LocationPermission permission;
 
-    // Test if location services are enabled.
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
       Get.snackbar("Error", 'Location services are disabled.');
       return;
     }
+
     permission = await Geolocator.checkPermission();
+
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        Get.snackbar('Error', 'location permissions are denied');
+        Get.snackbar('Error', 'Location permissions are denied');
         return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
       Get.snackbar(
-        'Error ',
-        'location permissions are permanently denied, we cannot request permissions.',
+        'Error',
+        'Location permissions are permanently denied.',
       );
       return;
     }
 
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
     final position = await Geolocator.getCurrentPosition();
+
     currentLat.value = position.latitude.toString();
     currentLong.value = position.longitude.toString();
 
@@ -671,9 +862,12 @@ class ControllerPlanTrip extends GetxController {
       position.latitude,
       position.longitude,
     );
+
     placeName.value =
-        '${place.first.locality.toString()}:${place.first.subAdministrativeArea.toString()}';
+        '${place.first.locality}:${place.first.subAdministrativeArea}';
 
     startLocationController.value.text = placeName.value;
+
+    print("Current location fetched: ${placeName.value} at (${currentLat.value}, ${currentLong.value})");
   }
 }
