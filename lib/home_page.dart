@@ -186,7 +186,7 @@ class HomePage extends StatelessWidget {
                               .isNotEmpty &&
                           destinationLocationController.value.text.isNotEmpty) {
                         fetchCoordinates();
-                        Get.to(BestRoutePage());
+                        // Get.to(BestRoutePage());
                       } else {
                         Get.snackbar('Error', 'هناك مشكلة في الوقت الحالي ');
                       }

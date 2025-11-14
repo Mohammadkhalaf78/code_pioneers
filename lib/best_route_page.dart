@@ -1,8 +1,14 @@
 import 'dart:ui';
+import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
+import 'package:get/utils.dart';
 
 class BestRoutePage extends StatelessWidget {
-  const BestRoutePage({super.key});
+  BestRoutePage({super.key});
+
+  final controller = Get.find<ControllerPlanTrip>();
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +36,7 @@ class BestRoutePage extends StatelessWidget {
         ),
         body: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: ListView(
             children: [
               // 🔶 الكونتينر الأورنج
               Container(
@@ -408,6 +413,7 @@ class BestRoutePage extends StatelessWidget {
                         ),
                       ],
                     ),
+
                     const SizedBox(height: 20),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
@@ -450,283 +456,397 @@ class BestRoutePage extends StatelessWidget {
               const SizedBox(height: 20),
 
               // 🔹 المسار الأبيض مع الخط العمودي
-              Stack(
+              // Container(width: 2, color: Colors.blue.withOpacity(0.5)),
+              Column(
                 children: [
-                  // الخط العمودي
-                  Positioned(
-                    right: 30,
-                    top: 30,
-                    bottom: 0,
-                    child: Container(
-                      width: 2,
-                      color: Colors.blue.withOpacity(0.5),
+                  // 🏠 منزلك
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      vertical: 12,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.1),
+                          blurRadius: 6,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: const Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.blue,
+                          child: Icon(
+                            Icons.home_rounded,
+                            color: Colors.white,
+                            size: 24,
+                          ),
+                        ),
+                        SizedBox(width: 10),
+                        Text(
+                          'منزلك',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  Column(
-                    children: [
-                      // 🏠 منزلك
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 6,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: const Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.blue,
-                              child: Icon(
-                                Icons.home_rounded,
-                                color: Colors.white,
-                                size: 24,
+                  const SizedBox(height: 15),
+                  // 🔹 موقع رقم 1
+                  // Container(
+                  //   width: double.infinity,
+                  //   padding: const EdgeInsets.symmetric(
+                  //     horizontal: 15,
+                  //     vertical: 12,
+                  //   ),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.white,
+                  //     borderRadius: BorderRadius.circular(12),
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //         color: Colors.black.withOpacity(0.1),
+                  //         blurRadius: 6,
+                  //         offset: const Offset(0, 2),
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   child: Row(
+                  //     children: [
+                  //       const CircleAvatar(
+                  //         radius: 20,
+                  //         backgroundColor: Colors.blue,
+                  //         child: Text(
+                  //           "1",
+                  //           style: TextStyle(
+                  //             color: Colors.white,
+                  //             fontWeight: FontWeight.bold,
+                  //             fontSize: 18,
+                  //           ),
+                  //         ),
+                  //       ),
+                  //       const SizedBox(width: 10),
+                  //       Expanded(
+                  //         child: Column(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //             const Text(
+                  //               "مطعم البيك",
+                  //               style: TextStyle(
+                  //                 color: Colors.black,
+                  //                 fontSize: 15,
+                  //                 fontWeight: FontWeight.w600,
+                  //               ),
+                  //             ),
+                  //             const SizedBox(height: 6),
+                  //             Row(
+                  //               mainAxisAlignment:
+                  //                   MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 Row(
+                  //                   children: const [
+                  //                     Icon(
+                  //                       Icons.location_on_outlined,
+                  //                       color: Colors.blue,
+                  //                       size: 18,
+                  //                     ),
+                  //                     SizedBox(width: 4),
+                  //                     Text(
+                  //                       "3.2 كم",
+                  //                       style: TextStyle(
+                  //                         color: Colors.black54,
+                  //                         fontSize: 14,
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //                 Row(
+                  //                   children: const [
+                  //                     Icon(
+                  //                       Icons.local_gas_station_outlined,
+                  //                       color: Colors.orange,
+                  //                       size: 18,
+                  //                     ),
+                  //                     SizedBox(width: 4),
+                  //                     Text(
+                  //                       "0.7 ر.س",
+                  //                       style: TextStyle(
+                  //                         color: Colors.black54,
+                  //                         fontSize: 14,
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //                 Row(
+                  //                   children: const [
+                  //                     Icon(
+                  //                       Icons.access_time,
+                  //                       color: Colors.green,
+                  //                       size: 18,
+                  //                     ),
+                  //                     SizedBox(width: 4),
+                  //                     Text(
+                  //                       "8 دقيقة",
+                  //                       style: TextStyle(
+                  //                         color: Colors.black54,
+                  //                         fontSize: 14,
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ),
+                  //     ],
+                  //   ),
+                  // ),
+                  // const SizedBox(height: 15),
+                  // // 🔹 موقع رقم 2
+                  // ListView.builder(
+                  //   shrinkWrap: true,
+                  //   physics: NeverScrollableScrollPhysics(),
+                  //   itemCount: controller.distnation.length,
+                  //   itemBuilder: (context, index) => Container(
+                  //     width: double.infinity,
+                  //     padding: const EdgeInsets.symmetric(
+                  //       horizontal: 15,
+                  //       vertical: 12,
+                  //     ),
+                  //     decoration: BoxDecoration(
+                  //       color: Colors.white,
+                  //       borderRadius: BorderRadius.circular(12),
+                  //       boxShadow: [
+                  //         BoxShadow(
+                  //           color: Colors.black.withOpacity(0.1),
+                  //           blurRadius: 6,
+                  //           offset: const Offset(0, 2),
+                  //         ),
+                  //       ],
+                  //     ),
+                  //     child: Row(
+                  //       children: [
+                  //         CircleAvatar(
+                  //           radius: 20,
+                  //           backgroundColor: Colors.blue,
+                  //           child: Text(
+                  //             '${controller.distnation.length}',
+                  //             style: TextStyle(
+                  //               color: Colors.white,
+                  //               fontWeight: FontWeight.bold,
+                  //               fontSize: 18,
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         const SizedBox(width: 10),
+                  //         Column(
+                  //           crossAxisAlignment: CrossAxisAlignment.start,
+                  //           children: [
+                  //             Text(
+                  //               '${controller.distnation[index]}',
+                  //               style: TextStyle(
+                  //                 color: Colors.black,
+                  //                 fontSize: 15,
+                  //                 fontWeight: FontWeight.w600,
+                  //               ),
+                  //             ),
+                  //             const SizedBox(height: 6),
+                  //             Row(
+                  //               mainAxisAlignment:
+                  //                   MainAxisAlignment.spaceBetween,
+                  //               children: [
+                  //                 Row(
+                  //                   children: [
+                  //                     Icon(
+                  //                       Icons.location_on_outlined,
+                  //                       color: Colors.blue,
+                  //                       size: 18,
+                  //                     ),
+                  //                     SizedBox(width: 4),
+                  //                     Text(
+                  //                       '${controller.distnation[index]} كم',
+                  //                       style: TextStyle(
+                  //                         color: Colors.black54,
+                  //                         fontSize: 12,
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //                 Row(
+                  //                   children: const [
+                  //                     Icon(
+                  //                       Icons.local_gas_station_outlined,
+                  //                       color: Colors.orange,
+                  //                       size: 18,
+                  //                     ),
+                  //                     SizedBox(width: 4),
+                  //                     Text(
+                  //                       "0.5 ر.س",
+                  //                       style: TextStyle(
+                  //                         color: Colors.black54,
+                  //                         fontSize: 14,
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //                 Row(
+                  //                   children: const [
+                  //                     Icon(
+                  //                       Icons.access_time,
+                  //                       color: Colors.green,
+                  //                       size: 18,
+                  //                     ),
+                  //                     SizedBox(width: 4),
+                  //                     Text(
+                  //                       "6 دقيقة",
+                  //                       style: TextStyle(
+                  //                         color: Colors.black54,
+                  //                         fontSize: 14,
+                  //                       ),
+                  //                     ),
+                  //                   ],
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           ],
+                  //         ),
+                  //       ],
+                  //     ),
+                  //   ),
+                  // ),
+                  // استبدل Expanded + ListView.builder بهذا داخل Column
+                  Obx(() {
+                    // تأكد من أقل طول للقوائم حتى لا يحدث RangeError
+
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: controller.route.length,
+                      itemBuilder: (context, index) {
+                        final placeName = controller.addPlace[index];
+
+                        return Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 15,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
                               ),
-                            ),
-                            SizedBox(width: 10),
-                            Text(
-                              'منزلك',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      // 🔹 موقع رقم 1
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 6,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            const CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.blue,
-                              child: Text(
-                                "1",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                backgroundColor: Colors.blue,
+                                child: Text(
+                                  '${index + 1}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "مطعم البيك",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      placeName,
+                                      style: const TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: const [
-                                          Icon(
-                                            Icons.location_on_outlined,
-                                            color: Colors.blue,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 4),
-                                          Text(
-                                            "3.2 كم",
-                                            style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 14,
+                                    const SizedBox(height: 6),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.location_on_outlined,
+                                              color: Colors.blue,
+                                              size: 18,
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: const [
-                                          Icon(
-                                            Icons.local_gas_station_outlined,
-                                            color: Colors.orange,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 4),
-                                          Text(
-                                            "0.7 ر.س",
-                                            style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 14,
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              '${controller.route[index].distanceKm ?? 0} كم',
+                                              style: const TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 12,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: const [
-                                          Icon(
-                                            Icons.access_time,
-                                            color: Colors.green,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 4),
-                                          Text(
-                                            "8 دقيقة",
-                                            style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 14,
+                                          ],
+                                        ),
+                                        // باقي الأعمدة الثابتة كما في كودك
+                                        Row(
+                                          children: const [
+                                            Icon(
+                                              Icons.local_gas_station_outlined,
+                                              color: Colors.orange,
+                                              size: 18,
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 15),
-                      // 🔹 موقع رقم 2
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 12,
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 6,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          children: [
-                            const CircleAvatar(
-                              radius: 20,
-                              backgroundColor: Colors.blue,
-                              child: Text(
-                                "2",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18,
+                                            SizedBox(width: 4),
+                                            Text(
+                                              "0.5 ر.س",
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: const [
+                                            Icon(
+                                              Icons.access_time,
+                                              color: Colors.green,
+                                              size: 18,
+                                            ),
+                                            SizedBox(width: 4),
+                                            Text(
+                                              "6 دقيقة",
+                                              style: TextStyle(
+                                                color: Colors.black54,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const Text(
-                                    "بنده",
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: const [
-                                          Icon(
-                                            Icons.location_on_outlined,
-                                            color: Colors.blue,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 4),
-                                          Text(
-                                            "2.5 كم",
-                                            style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: const [
-                                          Icon(
-                                            Icons.local_gas_station_outlined,
-                                            color: Colors.orange,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 4),
-                                          Text(
-                                            "0.5 ر.س",
-                                            style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Row(
-                                        children: const [
-                                          Icon(
-                                            Icons.access_time,
-                                            color: Colors.green,
-                                            size: 18,
-                                          ),
-                                          SizedBox(width: 4),
-                                          Text(
-                                            "6 دقيقة",
-                                            style: TextStyle(
-                                              color: Colors.black54,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  }),
                 ],
               ),
             ],

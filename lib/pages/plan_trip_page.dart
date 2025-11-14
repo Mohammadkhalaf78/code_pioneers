@@ -1,36 +1,17 @@
-import 'package:code_pioneers/Constants/colors.dart';
-import 'package:code_pioneers/coordiantes.dart';
-import 'package:dartx/dartx.dart';
+import 'package:code_pioneers/best_route_page.dart';
+import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
-import 'package:geocoding/geocoding.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
-class PlanTripPage extends StatefulWidget {
+class PlanTripPage extends StatelessWidget {
   PlanTripPage({super.key});
 
-  @override
-  State<PlanTripPage> createState() => _PlanTripPageState();
-}
-
-class _PlanTripPageState extends State<PlanTripPage> {
-  final color = ColorsConst();
-
-  final addPlace = <String>[].obs;
-
-  final controllerAddPlace = TextEditingController();
-
-  final startLocationController = TextEditingController().obs;
-
-  final currentLat = ''.obs;
-  final currentLong = ''.obs;
-  final placeName = ''.obs;
-  final List<Coordiantes> coords = [];
+  final controller = Get.find<ControllerPlanTrip>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: color.backgroundColor,
+      backgroundColor: controller.color.backgroundColor,
       body: SafeArea(
         child: ListView(
           children: [
@@ -45,7 +26,10 @@ class _PlanTripPageState extends State<PlanTripPage> {
                     gradient: LinearGradient(
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
-                      colors: [color.primaryColor, color.secondColor],
+                      colors: [
+                        controller.color.primaryColor,
+                        controller.color.secondColor,
+                      ],
                     ),
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(28),
@@ -177,9 +161,9 @@ class _PlanTripPageState extends State<PlanTripPage> {
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: color.containerColor2,
+                      color: controller.color.containerColor2,
                       borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: color.primaryColor),
+                      border: Border.all(color: controller.color.primaryColor),
                       boxShadow: [
                         BoxShadow(
                           color: Colors.black,
@@ -229,9 +213,7 @@ class _PlanTripPageState extends State<PlanTripPage> {
                                 ),
                                 child: IconButton(
                                   onPressed: () {
-                                    getLocation();
-                                    startLocationController.value.text =
-                                        placeName.value;
+                                    controller.getLocation();
                                   },
                                   icon: const Icon(
                                     Icons.gps_fixed,
@@ -243,7 +225,9 @@ class _PlanTripPageState extends State<PlanTripPage> {
                               Expanded(
                                 child: Obx(
                                   () => TextField(
-                                    controller: startLocationController.value,
+                                    controller: controller
+                                        .startLocationController
+                                        .value,
                                     decoration: InputDecoration(
                                       border: InputBorder.none,
                                       hintText: 'أدخل موقع البداية...',
@@ -289,7 +273,7 @@ class _PlanTripPageState extends State<PlanTripPage> {
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: color.containerColor,
+                      color: controller.color.containerColor,
                       borderRadius: BorderRadius.circular(14),
                       boxShadow: [
                         BoxShadow(
@@ -319,9 +303,14 @@ class _PlanTripPageState extends State<PlanTripPage> {
                             ElevatedButton.icon(
                               onPressed: () {
                                 // addPlace.add('New Place');
-                                if (controllerAddPlace.text.isNotEmpty) {
-                                  addPlace.add(controllerAddPlace.text);
-                                  controllerAddPlace.clear();
+                                if (controller
+                                    .controllerAddPlace
+                                    .text
+                                    .isNotEmpty) {
+                                  controller.addPlace.add(
+                                    controller.controllerAddPlace.text,
+                                  );
+                                  controller.controllerAddPlace.clear();
                                   // fetchCoordinates();
                                 } else {
                                   Get.snackbar(
@@ -339,7 +328,7 @@ class _PlanTripPageState extends State<PlanTripPage> {
                                 style: TextStyle(color: Colors.white),
                               ),
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: color.primaryColor,
+                                backgroundColor: controller.color.primaryColor,
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -363,7 +352,8 @@ class _PlanTripPageState extends State<PlanTripPage> {
                                   children: [
                                     Expanded(
                                       child: TextField(
-                                        controller: controllerAddPlace,
+                                        controller:
+                                            controller.controllerAddPlace,
                                         decoration: InputDecoration(
                                           border: InputBorder.none,
                                           hintText: 'بحث عن مكان',
@@ -384,12 +374,12 @@ class _PlanTripPageState extends State<PlanTripPage> {
                   ),
                   // List of added places
                   Obx(
-                    () => addPlace.isEmpty
+                    () => controller.addPlace.isEmpty
                         ? Container(
                             margin: EdgeInsets.only(top: 16),
                             width: double.infinity,
                             decoration: BoxDecoration(
-                              color: color.containerColor,
+                              color: controller.color.containerColor,
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Padding(
@@ -423,13 +413,13 @@ class _PlanTripPageState extends State<PlanTripPage> {
                         : ListView.builder(
                             shrinkWrap: true,
                             physics: NeverScrollableScrollPhysics(),
-                            itemCount: addPlace.length,
+                            itemCount: controller.addPlace.length,
                             itemBuilder: (ctx, index) {
                               return Container(
                                 margin: EdgeInsets.only(top: 12),
                                 padding: EdgeInsets.all(8),
                                 decoration: BoxDecoration(
-                                  color: color.containerColor,
+                                  color: controller.color.containerColor,
                                   borderRadius: BorderRadius.circular(12),
                                 ),
                                 child: Row(
@@ -444,7 +434,7 @@ class _PlanTripPageState extends State<PlanTripPage> {
                                       child: Center(
                                         child: IconButton(
                                           onPressed: () {
-                                            addPlace.removeAt(index);
+                                            controller.addPlace.removeAt(index);
                                           },
                                           icon: Icon(
                                             Icons.close,
@@ -455,12 +445,16 @@ class _PlanTripPageState extends State<PlanTripPage> {
                                       ),
                                     ),
                                     const SizedBox(width: 12),
-                                    Expanded(child: Text('${addPlace[index]}')),
+                                    Expanded(
+                                      child: Text(
+                                        '${controller.addPlace[index]}',
+                                      ),
+                                    ),
                                     Container(
                                       width: 40,
                                       height: 40,
                                       decoration: BoxDecoration(
-                                        color: color.primaryColor,
+                                        color: controller.color.primaryColor,
                                         shape: BoxShape.circle,
                                       ),
                                       child: Center(
@@ -513,19 +507,28 @@ class _PlanTripPageState extends State<PlanTripPage> {
                   // Create best route button
                   ElevatedButton.icon(
                     onPressed: () async {
-                      if (addPlace.isEmpty ||
-                          startLocationController.value.text.isEmpty) {
+                      if (controller.addPlace.isEmpty ||
+                          controller
+                              .startLocationController
+                              .value
+                              .text
+                              .isEmpty) {
                         Get.snackbar(
                           'خطأ',
                           'يرجى إدخال نقطة البداية وإضافة وجهة واحدة على الأقل',
                         );
                       } else {
-                        await fetchCoordinates();
-                        // Proceed to create the best route
-                       await getDistance();
+                        // await controller.calculateRouteAndPrepare();
+                        print(controller.route);
+                        // controller.getDistance();
+
                         Get.snackbar(
                           'نجاح',
                           'تم إنشاء أفضل مسار بناءً على مدخلاتك',
+                        );
+
+                        Get.to(
+                          BestRoutePage(),
                         );
                       }
                     },
@@ -538,7 +541,7 @@ class _PlanTripPageState extends State<PlanTripPage> {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: color.primaryColor,
+                      backgroundColor: controller.color.primaryColor,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(14),
                       ),
@@ -554,93 +557,5 @@ class _PlanTripPageState extends State<PlanTripPage> {
         ),
       ),
     );
-  }
-
-  Future<List<Coordiantes>> fetchCoordinates() async {
-    // final place1 = await locationFromAddress(addPlace.first);
-    for (final element in addPlace) {
-      try {
-        final locations = await locationFromAddress(element);
-        if (locations.isNotEmpty) {
-          final loc = locations.first;
-          coords.add(
-            Coordiantes(
-              placeName: element,
-              latitude: loc.latitude,
-              longitude: loc.longitude,
-            ),
-          );
-        }
-      } catch (e) {
-        // تعامل مع الخطأ (مثلاً سجل أو اعرض رسالة)
-        // print('failed for $element: $e');
-        Get.snackbar('failed', 'for $element: $e');
-      }
-    }
-
-    return coords;
-    // print(place1);
-  }
-
-  Future<void> getDistance() async {
-  final dist=  Geolocator.distanceBetween(
-      currentLat.value.toDouble(),
-      currentLong.value.toDouble(),
-      coords.first.latitude,
-      coords.first.longitude,
-    );
-  print('Distance: ${dist} meters');
-  }
-
-  Future<void> getLocation() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    // Test if location services are enabled.
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      // Location services are not enabled don't continue
-      // accessing the position and request users of the
-      // App to enable the location services.
-      Get.snackbar("Error", 'Location services are disabled.');
-      return;
-    }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        // Permissions are denied, next time you could try
-        // requesting permissions again (this is also where
-        // Android's shouldShowRequestPermissionRationale
-        // returned true. According to Android guidelines
-        // your App should show an explanatory UI now.
-        Get.snackbar('Error', 'location permissions are denied');
-        return;
-      }
-    }
-
-    if (permission == LocationPermission.deniedForever) {
-      // Permissions are denied forever, handle appropriately.
-      Get.snackbar(
-        'Error ',
-        'location permissions are permanently denied, we cannot request permissions.',
-      );
-      return;
-    }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    final position = await Geolocator.getCurrentPosition();
-    currentLat.value = position.latitude.toString();
-    currentLong.value = position.longitude.toString();
-    print('${position.latitude} , ${position.longitude}');
-
-    final place = await placemarkFromCoordinates(
-      position.latitude,
-      position.longitude,
-    );
-    print('${place.first.locality}: ${place.first.country}');
-    placeName.value =
-        '${place.first.locality.toString()}:${place.first.subAdministrativeArea.toString()}';
   }
 }
