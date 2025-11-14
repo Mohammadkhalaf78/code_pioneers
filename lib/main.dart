@@ -1,5 +1,5 @@
-import 'package:code_pioneers/best_route_page.dart';
-import 'package:code_pioneers/best_route_page.dart';
+import 'package:code_pioneers/pages/best_route_page.dart';
+import 'package:code_pioneers/pages/best_route_page.dart';
 import 'package:code_pioneers/pages/plan_trip_page.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 
