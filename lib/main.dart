@@ -1,5 +1,7 @@
 import 'package:code_pioneers/best_route_page.dart';
+import 'package:code_pioneers/best_route_page.dart';
 import 'package:code_pioneers/pages/plan_trip_page.dart';
+import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,7 +17,23 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: PlanTripPage(),
+      initialRoute: '/PlanTripPage',
+      getPages: [
+        GetPage(
+          name: '/PlanTripPage',
+          page: () => PlanTripPage(),
+          binding: BindingsBuilder(() {
+            Get.put(ControllerPlanTrip());
+          }),
+        ),
+        GetPage(
+          name: '/BestRoutePage',
+          page: () => BestRoutePage(),
+          binding: BindingsBuilder(() {
+            Get.put(ControllerPlanTrip());
+          }),
+        ),
+      ],
     );
   }
 }

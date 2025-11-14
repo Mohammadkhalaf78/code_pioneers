@@ -7,6 +7,7 @@ class PlanTripPage extends StatelessWidget {
   PlanTripPage({super.key});
 
   final controller = Get.find<ControllerPlanTrip>();
+  
 
   @override
   Widget build(BuildContext context) {
@@ -16,6 +17,7 @@ class PlanTripPage extends StatelessWidget {
         child: ListView(
           children: [
             Stack(
+              
               alignment: Alignment.topCenter,
               children: [
                 Container(height: 222, color: Color(0xFFF6F8FB)),
@@ -519,7 +521,7 @@ class PlanTripPage extends StatelessWidget {
                         );
                       } else {
                         // await controller.calculateRouteAndPrepare();
-                        print(controller.route);
+                        
                         // controller.getDistance();
 
                         Get.snackbar(

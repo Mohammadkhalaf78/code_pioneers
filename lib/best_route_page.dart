@@ -730,7 +730,7 @@ class BestRoutePage extends StatelessWidget {
                     return ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: controller.route.length,
+                      itemCount: controller.addPlace.length,
                       itemBuilder: (context, index) {
                         final placeName = controller.addPlace[index];
 
@@ -793,7 +793,7 @@ class BestRoutePage extends StatelessWidget {
                                             ),
                                             const SizedBox(width: 4),
                                             Text(
-                                              '${controller.route[index].distanceKm ?? 0} كم',
+                                              '} كم',
                                               style: const TextStyle(
                                                 color: Colors.black54,
                                                 fontSize: 12,
