@@ -520,10 +520,7 @@ class PlanTripPage extends StatelessWidget {
                       } else {
                         // await controller.calculateRouteAndPrepare();
 
-                        await controller.fetchCoordinates();
-
-                        await controller.getDistance();
-                        controller.bastway();
+                        
 
                         Get.snackbar(
                           'نجاح',
