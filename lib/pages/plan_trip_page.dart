@@ -7,7 +7,7 @@ class PlanTripPage extends StatelessWidget {
   PlanTripPage({super.key});
 
   final controller = Get.find<ControllerPlanTrip>();
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +19,6 @@ class PlanTripPage extends StatelessWidget {
               alignment: Alignment.topCenter,
               children: [
                 Container(height: 222, color: Color(0xFFF6F8FB)),
-                // Top gradient area (big appbar-like)
                 Container(
                   height: 188,
                   decoration: BoxDecoration(
@@ -70,7 +69,6 @@ class PlanTripPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 12),
-                        // round paper-plane icon on the right
                         Container(
                           width: 56,
                           height: 56,
@@ -88,7 +86,6 @@ class PlanTripPage extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 Positioned.fill(
                   top: 144,
                   child: Container(
@@ -150,14 +147,12 @@ class PlanTripPage extends StatelessWidget {
                 ),
               ],
             ),
-
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Floating white card (vehicle selector)
-                  // "نقطة البداية" card
+                  // نقطة البداية card
                   Container(
                     padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
@@ -191,8 +186,6 @@ class PlanTripPage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-
-                        // inner white rounded field
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 8,
@@ -242,7 +235,6 @@ class PlanTripPage extends StatelessWidget {
                             ],
                           ),
                         ),
-
                         const SizedBox(height: 8),
                         Row(
                           children: const [
@@ -266,9 +258,7 @@ class PlanTripPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 16),
-
                   // Add destinations card
                   Container(
                     padding: const EdgeInsets.all(14),
@@ -297,12 +287,10 @@ class PlanTripPage extends StatelessWidget {
                           ],
                         ),
                         const SizedBox(height: 12),
-
                         Row(
                           children: [
                             ElevatedButton.icon(
                               onPressed: () {
-                                // addPlace.add('New Place');
                                 if (controller
                                     .controllerAddPlace
                                     .text
@@ -311,7 +299,6 @@ class PlanTripPage extends StatelessWidget {
                                     controller.controllerAddPlace.text,
                                   );
                                   controller.controllerAddPlace.clear();
-                                  // fetchCoordinates();
                                 } else {
                                   Get.snackbar(
                                     'خطأ',
@@ -335,9 +322,7 @@ class PlanTripPage extends StatelessWidget {
                                 elevation: 0,
                               ),
                             ),
-
                             const SizedBox(width: 12),
-
                             Expanded(
                               child: Container(
                                 height: 44,
@@ -367,12 +352,10 @@ class PlanTripPage extends StatelessWidget {
                             ),
                           ],
                         ),
-
                         SizedBox(height: 12),
                       ],
                     ),
                   ),
-                  // List of added places
                   Obx(
                     () => controller.addPlace.isEmpty
                         ? Container(
@@ -478,10 +461,7 @@ class PlanTripPage extends StatelessWidget {
                             },
                           ),
                   ),
-
                   const SizedBox(height: 16),
-
-                  // Warning box
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
@@ -501,34 +481,32 @@ class PlanTripPage extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   const SizedBox(height: 22),
-
-                  // Create best route button
+                  // Create best route button - التعديل هنا
                   ElevatedButton.icon(
                     onPressed: () async {
-                      if (controller.addPlace.isEmpty ||
-                          controller
-                              .startLocationController
-                              .value
-                              .text
-                              .isEmpty) {
-                        Get.snackbar(
-                          'خطأ',
-                          'يرجى إدخال نقطة البداية وإضافة وجهة واحدة على الأقل',
-                        );
-                      } else {
-                        // await controller.calculateRouteAndPrepare();
-
-                        
-
-                        Get.snackbar(
-                          'نجاح',
-                          'تم إنشاء أفضل مسار بناءً على مدخلاتك',
-                        );
-
-                        // Get.to(BestRoutePage());
+                      if (controller.addPlace.isEmpty) {
+                        Get.snackbar('خطأ', 'يرجى إضافة وجهة واحدة على الأقل');
+                        return;
                       }
+
+                      // لو نقطة البداية فاضية، نجيب الموقع الحالي
+                      if (controller.startLocationController.value.text.isEmpty) {
+                        await controller.getLocation();
+                      }
+
+                      // جلب الإحداثيات
+                      await controller.fetchCoordinates();
+
+                      // ترتيب المسار حسب أقرب مسافة باستخدام نقطة البداية
+                      await controller.sortByNearestPath(
+                        startLocation: controller.startLocationController.value.text,
+                      );
+
+                      Get.snackbar('نجاح', 'تم إنشاء أفضل مسار بناءً على مدخلاتك');
+
+                      // الانتقال لصفحة أفضل مسار
+                      Get.to(() => BestRoutePage());
                     },
                     icon: const Icon(Icons.alt_route, color: Colors.white),
                     label: const Padding(
@@ -546,14 +524,13 @@ class PlanTripPage extends StatelessWidget {
                       elevation: 0,
                     ),
                   ),
-
                   const SizedBox(height: 40),
                 ],
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
+     ),
+);
+}
 }

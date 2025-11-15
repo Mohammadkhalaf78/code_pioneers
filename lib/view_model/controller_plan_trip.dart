@@ -1,6 +1,6 @@
-
 import 'package:code_pioneers/Constants/colors.dart';
 import 'package:code_pioneers/coordiantes.dart';
+import 'package:dartx/dartx.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -189,16 +189,5 @@ class ControllerPlanTrip extends GetxController {
     startLocationController.value.text = placeName.value;
 
     print("Current location fetched: ${placeName.value} at (${currentLat.value}, ${currentLong.value})");
-  }
 }
-
-
-
-
-
-
-
-
-
-
-
+}

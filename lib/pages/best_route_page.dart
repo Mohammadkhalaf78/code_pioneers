@@ -1,18 +1,28 @@
 import 'dart:ui';
-import 'package:code_pioneers/coordiantes.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/utils.dart';
+import 'package:geolocator/geolocator.dart';
 
 class BestRoutePage extends StatelessWidget {
   BestRoutePage({super.key});
 
   final controller = Get.find<ControllerPlanTrip>();
 
+  // اختياري: ممكن تضيفي زر لتحديث المسار عند الضغط
+  Future<void> _updateRoute() async {
+    await controller.sortByNearestPath(
+      startLocation: controller.startLocationController.value.text,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    // ممكن تعمل تحديث للمسار عند دخول الصفحة
+    _updateRoute();
+
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -273,14 +283,34 @@ class BestRoutePage extends StatelessWidget {
                                       ),
                                     ),
                                     const SizedBox(height: 5),
-                                    const Text(
-                                      "9.5",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
+                                    Obx(() {
+                                      double totalDistance = 0;
+                                      for (var i = 0; i < controller.coords.length; i++) {
+                                        if (i == 0) {
+                                          totalDistance += Geolocator.distanceBetween(
+                                            double.parse(controller.currentLat.value.isEmpty ? '0' : controller.currentLat.value),
+                                            double.parse(controller.currentLong.value.isEmpty ? '0' : controller.currentLong.value),
+                                            controller.coords[i].latitude,
+                                            controller.coords[i].longitude,
+                                          );
+                                        } else {
+                                          totalDistance += Geolocator.distanceBetween(
+                                            controller.coords[i - 1].latitude,
+                                            controller.coords[i - 1].longitude,
+                                            controller.coords[i].latitude,
+                                            controller.coords[i].longitude,
+                                          );
+                                        }
+                                      }
+                                      return Text(
+                                        (totalDistance / 1000).toStringAsFixed(2),
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                      );
+                                    }),
                                     const Text(
                                       "كم",
                                       style: TextStyle(
@@ -456,8 +486,6 @@ class BestRoutePage extends StatelessWidget {
               ),
               const SizedBox(height: 20),
 
-              // 🔹 المسار الأبيض مع الخط العمودي
-              // Container(width: 2, color: Colors.blue.withOpacity(0.5)),
               Column(
                 children: [
                   // 🏠 منزلك
@@ -502,15 +530,32 @@ class BestRoutePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Obx(() {
-                    // تأكد من أقل طول للقوائم حتى لا يحدث RangeError
 
+                  Obx(() {
                     return ListView.builder(
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: controller.coords.length,
                       itemBuilder: (context, index) {
-                        
+                        final place = controller.coords[index];
+
+                        // حساب المسافة من المكان السابق
+                        double distance = 0;
+                        if (index == 0) {
+                          distance = Geolocator.distanceBetween(
+                            double.parse(controller.currentLat.value.isEmpty ? '0' : controller.currentLat.value),
+                            double.parse(controller.currentLong.value.isEmpty ? '0' : controller.currentLong.value),
+                            place.latitude,
+                            place.longitude,
+                          );
+                        } else {
+                          distance = Geolocator.distanceBetween(
+                            controller.coords[index - 1].latitude,
+                            controller.coords[index - 1].longitude,
+                            place.latitude,
+                            place.longitude,
+                          );
+                        }
 
                         return Container(
                           width: double.infinity,
@@ -550,7 +595,7 @@ class BestRoutePage extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      '${controller.coords[index].placeName}',
+                                      place.placeName,
                                       style: const TextStyle(
                                         color: Colors.black,
                                         fontSize: 15,
@@ -571,8 +616,7 @@ class BestRoutePage extends StatelessWidget {
                                             ),
                                             const SizedBox(width: 4),
                                             Text(
-                                            
-                                              '${controller.coords[index].distanceKm} كم',
+                                              '${(distance / 1000).toStringAsFixed(2)} كم',
                                               style: const TextStyle(
                                                 color: Colors.black54,
                                                 fontSize: 12,
@@ -580,7 +624,6 @@ class BestRoutePage extends StatelessWidget {
                                             ),
                                           ],
                                         ),
-                                        // باقي الأعمدة الثابتة كما في كودك
                                         Row(
                                           children: const [
                                             Icon(
@@ -631,7 +674,7 @@ class BestRoutePage extends StatelessWidget {
             ],
           ),
         ),
-      ),
-    );
-  }
+     ),
+);
+}
 }
