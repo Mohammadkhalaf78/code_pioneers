@@ -1,4 +1,6 @@
 import 'package:code_pioneers/pages/best_route_page.dart';
+import 'package:code_pioneers/pages/mycars.dart';
+import 'package:code_pioneers/service/my_car_page.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,7 +9,7 @@ class PlanTripPage extends StatelessWidget {
   PlanTripPage({super.key});
 
   final controller = Get.find<ControllerPlanTrip>();
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,67 +88,74 @@ class PlanTripPage extends StatelessWidget {
                     ),
                   ),
                 ),
+                
                 Positioned.fill(
                   top: 144,
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 22, right: 22),
-                    padding: const EdgeInsets.all(11),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          blurRadius: 12,
-                          offset: const Offset(0.06, 6),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.keyboard_arrow_down,
-                          color: Colors.black54,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: const [
-                              Text(
-                                'سيارتي',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              Text(
-                                'كامري • 7.5 لتر/100كم',
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 8,
-                                ),
-                              ),
-                            ],
+                  child: GestureDetector(
+                    onTap: () {
+                      Get.toNamed('myCars');
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(left: 22, right: 22),
+                      padding: const EdgeInsets.all(11),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.06),
+                            blurRadius: 12,
+                            offset: const Offset(0.06, 6),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        CircleAvatar(
-                          radius: 18,
-                          backgroundColor: Colors.blue.shade100,
-                          child: const Icon(
-                            Icons.directions_car,
-                            color: Colors.red,
-                            size: 25,
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          const Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Colors.black54,
                           ),
-                        ),
-                      ],
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: const [
+                                Text(
+                                  'سيارتي',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 12,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  'كامري • 7.5 لتر/100كم',
+                                  style: TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 8,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.blue.shade100,
+                            child: const Icon(
+                              Icons.directions_car,
+                              color: Colors.red,
+                              size: 25,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
+
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -491,7 +500,11 @@ class PlanTripPage extends StatelessWidget {
                       }
 
                       // لو نقطة البداية فاضية، نجيب الموقع الحالي
-                      if (controller.startLocationController.value.text.isEmpty) {
+                      if (controller
+                          .startLocationController
+                          .value
+                          .text
+                          .isEmpty) {
                         await controller.getLocation();
                       }
 
@@ -500,13 +513,17 @@ class PlanTripPage extends StatelessWidget {
 
                       // ترتيب المسار حسب أقرب مسافة باستخدام نقطة البداية
                       await controller.sortByNearestPath(
-                        startLocation: controller.startLocationController.value.text,
+                        startLocation:
+                            controller.startLocationController.value.text,
                       );
 
-                      Get.snackbar('نجاح', 'تم إنشاء أفضل مسار بناءً على مدخلاتك');
+                      Get.snackbar(
+                        'نجاح',
+                        'تم إنشاء أفضل مسار بناءً على مدخلاتك',
+                      );
 
                       // الانتقال لصفحة أفضل مسار
-                      Get.to(() => BestRoutePage());
+                      Get.toNamed('BestRoutePage');
                     },
                     icon: const Icon(Icons.alt_route, color: Colors.white),
                     label: const Padding(
@@ -530,7 +547,7 @@ class PlanTripPage extends StatelessWidget {
             ),
           ],
         ),
-     ),
-);
-}
+      ),
+    );
+  }
 }
