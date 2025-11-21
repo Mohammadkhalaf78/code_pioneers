@@ -105,7 +105,312 @@ class MyCarsPage extends StatelessWidget {
                   top: 140,
                   child: InkWell(
                     onTap: () {
-                  
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return AlertDialog(
+                            // عنوان الديالوج: استخدمت Row عشان تكون RTL وعلامة الإغلاق.
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: const [
+                                    Text(
+                                      'إضافة سيارة جديدة',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                    SizedBox(width: 6),
+                                    Icon(
+                                      Icons.directions_car,
+                                      color: Colors.blue,
+                                    ),
+                                  ],
+                                ),
+                                IconButton(
+                                  icon: const Icon(
+                                    Icons.close,
+                                    color: Colors.black,
+                                  ),
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                              ],
+                            ),
+
+                            // المحتوى الطويل يوضع داخل SingleChildScrollView + ConstrainedBox
+                            content: ConstrainedBox(
+                              constraints: BoxConstraints(
+                                // أقصى ارتفاع: 70% من ارتفاع الشاشة — عدّله لو تحب
+                                maxHeight:
+                                    MediaQuery.of(context).size.height * 0.7,
+                                // عرض كامل متاح داخل الديالوج
+                                maxWidth: MediaQuery.of(context).size.width * 1.0,
+                              ),
+                              child: SingleChildScrollView(
+                                child: Directionality(
+                                  textDirection: TextDirection.rtl,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    children: [
+                                      const SizedBox(height: 0),
+
+                                      const Text(
+                                        'الاسم المستعار',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 5),
+                                      TextFormField(
+                                        textAlign: TextAlign.right,
+                                        decoration: const InputDecoration(
+                                          hintText: 'مثال: سيارتي',
+                                          border: OutlineInputBorder(),
+                                        ),
+                                      ),
+                                    
+
+                                      const SizedBox(height: 20),
+
+                                      // الشركة + الموديل
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                const Text(
+                                                  'الشركة المصنعة',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 5),
+                                                TextFormField(
+                                                  textAlign: TextAlign.right,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                        hintText: 'تويوتا',
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                const Text(
+                                                  'الموديل',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 5),
+                                                TextFormField(
+                                                  textAlign: TextAlign.right,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                        hintText: 'كامري',
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      const SizedBox(height: 25),
+
+                                      const SizedBox(height: 20),
+
+                                      // السنة + CC
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                const Text(
+                                                  'السنة',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 5),
+                                                TextFormField(
+                                                  textAlign: TextAlign.right,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                        hintText: '2025',
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.stretch,
+                                              children: [
+                                                const Text(
+                                                  'سعة المحرك(cc)',
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 5),
+                                                TextFormField(
+                                                  textAlign: TextAlign.right,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                        hintText: '2000',
+                                                        border:
+                                                            OutlineInputBorder(),
+                                                      ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      const SizedBox(height: 20),
+
+                                      const Text(
+                                        'نوع الوقود',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 10),
+
+                                      Row(
+                                        children: [
+                                          Expanded(
+                                            child: ElevatedButton(
+                                              onPressed: () {},
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    Colors.blue.shade100,
+                                                foregroundColor:
+                                                    Colors.blue.shade900,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      vertical: 15,
+                                                    ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                                elevation: 0,
+                                              ),
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text('بنزين'),
+                                                  SizedBox(width: 5),
+                                                  Icon(
+                                                    Icons
+                                                        .local_gas_station_rounded,
+                                                    size: 18,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 10),
+                                          Expanded(
+                                            child: OutlinedButton(
+                                              onPressed: () {},
+                                              style: OutlinedButton.styleFrom(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                      vertical: 15,
+                                                    ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(8),
+                                                ),
+                                              ),
+                                              child: const Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    'ديزل',
+                                                    style: TextStyle(
+                                                      color: Colors.black87,
+                                                    ),
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Icon(
+                                                    Icons
+                                                        .local_gas_station_outlined,
+                                                    size: 18,
+                                                    color: Colors.black54,
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      const SizedBox(height: 20),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+
+                            // الأزرار فقط في الـ actions
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text(
+                                  'إلغاء',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  // اكتب هنا عملية الحفظ أو الفاليديشن
+                                  print('تم الإضافة ✔');
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('إضافة'),
+                              ),
+                            ],
+                          );
+                      
+                        },
+                      );
+                      // Get.to(
+
                       //   // showdialogAddCar(context)
                       //   );
                     },

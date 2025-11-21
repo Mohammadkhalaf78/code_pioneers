@@ -216,7 +216,7 @@ class ControllerPlanTrip extends GetxController {
     // );
   }
 
-  getloc() async {
+  getloc() {
     List<double> distance = [];
     for (var index = 0; index < coords.length; index++) {
       final place = coords[index];
@@ -268,11 +268,12 @@ class ControllerPlanTrip extends GetxController {
     double newValue = 0;
     for (var p in coords) {
       if (p.distanceKm != null) {
-        await sortByNearestPath();
+         await sortByNearestPath();
         newValue += p.distanceKm!;
       }
       print('this is all distance in your app ${newValue}');
       totalKm.value = newValue;
+      
     }
     return totalKm.value;
   }
