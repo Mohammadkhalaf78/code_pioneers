@@ -1,15 +1,18 @@
 import 'dart:ui';
+import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
-import 'package:get/utils.dart';
-import 'package:geolocator/geolocator.dart';
 
+// ignore: must_be_immutable
 class BestRoutePage extends StatelessWidget {
   BestRoutePage({super.key});
 
   final controller = Get.find<ControllerPlanTrip>();
+  final controllerCar = Get.find<ControllerCarDetials>();
+
+  double rounded = 0;
 
   // اختياري: ممكن تضيفي زر لتحديث المسار عند الضغط
   Future<void> _updateRoute() async {
@@ -283,34 +286,74 @@ class BestRoutePage extends StatelessWidget {
                                       ),
                                     ),
                                     const SizedBox(height: 5),
-                                    Obx(() {
-                                      double totalDistance = 0;
-                                      for (var i = 0; i < controller.coords.length; i++) {
-                                        if (i == 0) {
-                                          totalDistance += Geolocator.distanceBetween(
-                                            double.parse(controller.currentLat.value.isEmpty ? '0' : controller.currentLat.value),
-                                            double.parse(controller.currentLong.value.isEmpty ? '0' : controller.currentLong.value),
-                                            controller.coords[i].latitude,
-                                            controller.coords[i].longitude,
-                                          );
-                                        } else {
-                                          totalDistance += Geolocator.distanceBetween(
-                                            controller.coords[i - 1].latitude,
-                                            controller.coords[i - 1].longitude,
-                                            controller.coords[i].latitude,
-                                            controller.coords[i].longitude,
-                                          );
-                                        }
-                                      }
-                                      return Text(
-                                        (totalDistance / 1000).toStringAsFixed(2),
+
+                                    // Obx(
+                                    //   () {
+                                    //   double totalDistance = 0;
+                                    //   for (
+                                    //     var i = 0;
+                                    //     i < controller.coords.length;
+                                    //     i++
+                                    //   ) {
+                                    //     if (i == 0) {
+                                    //       totalDistance +=
+                                    //           Geolocator.distanceBetween(
+                                    //             double.parse(
+                                    //               controller
+                                    //                       .currentLat
+                                    //                       .value
+                                    //                       .isEmpty
+                                    //                   ? '0'
+                                    //                   : controller
+                                    //                         .currentLat
+                                    //                         .value,
+                                    //             ),
+                                    //             double.parse(
+                                    //               controller
+                                    //                       .currentLong
+                                    //                       .value
+                                    //                       .isEmpty
+                                    //                   ? '0'
+                                    //                   : controller
+                                    //                         .currentLong
+                                    //                         .value,
+                                    //             ),
+                                    //             controller.coords[i].latitude,
+                                    //             controller.coords[i].longitude,
+                                    //           );
+                                    //     } else {
+                                    //       totalDistance +=
+                                    //           Geolocator.distanceBetween(
+                                    //             controller
+                                    //                 .coords[i - 1]
+                                    //                 .latitude,
+                                    //             controller
+                                    //                 .coords[i - 1]
+                                    //                 .longitude,
+                                    //             controller.coords[i].latitude,
+                                    //             controller.coords[i].longitude,
+                                    //           );
+                                    //     }
+                                    //   }
+                                    //   return Text(
+                                    //     (totalDistance / 1000).toStringAsFixed(
+                                    //       2,
+                                    //     ),
+                                    //     style: const TextStyle(
+                                    //       fontSize: 20,
+                                    //       fontWeight: FontWeight.bold,
+                                    //       color: Colors.white,
+                                    //     ),
+                                    //   );
+                                    // }),
+                                    Obx(() => Text('${controller.totalKm()}',
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                        ),
-                                      );
-                                    }),
+                                        ))),
+                                    //  Text('${controller.total().toString()}'),
+                                    //  Obx(()=>Text(controller.total())),
                                     const Text(
                                       "كم",
                                       style: TextStyle(
@@ -362,7 +405,8 @@ class BestRoutePage extends StatelessWidget {
                                       ),
                                     ),
                                     const SizedBox(height: 5),
-                                    const Text(
+                                    Text(
+                                      // '${controller.totalTime(rounded)}',
                                       "2.0",
                                       style: TextStyle(
                                         fontSize: 20,
@@ -539,23 +583,12 @@ class BestRoutePage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final place = controller.coords[index];
 
-                        // حساب المسافة من المكان السابق
-                        double distance = 0;
-                        if (index == 0) {
-                          distance = Geolocator.distanceBetween(
-                            double.parse(controller.currentLat.value.isEmpty ? '0' : controller.currentLat.value),
-                            double.parse(controller.currentLong.value.isEmpty ? '0' : controller.currentLong.value),
-                            place.latitude,
-                            place.longitude,
-                          );
-                        } else {
-                          distance = Geolocator.distanceBetween(
-                            controller.coords[index - 1].latitude,
-                            controller.coords[index - 1].longitude,
-                            place.latitude,
-                            place.longitude,
-                          );
-                        }
+                        controller.value =
+                            ((controller.getloc()[index] * 1.25) / 1000);
+                        rounded = double.parse(
+                          controller.value.toStringAsFixed(2),
+                        );
+                        controller.result = rounded * controllerCar.calculate();
 
                         return Container(
                           width: double.infinity,
@@ -615,8 +648,11 @@ class BestRoutePage extends StatelessWidget {
                                               size: 18,
                                             ),
                                             const SizedBox(width: 4),
+                                            // km
                                             Text(
-                                              '${(distance / 1000).toStringAsFixed(2)} كم',
+                                              '${rounded.toStringAsFixed(1)}',
+                                              // '${currantlocation().toStringAsFixed(1)}',
+                                              // '${((controller.getloc()[index] * 1.25) / 1000).toStringAsFixed(2)} كم',
                                               style: const TextStyle(
                                                 color: Colors.black54,
                                                 fontSize: 12,
@@ -625,15 +661,18 @@ class BestRoutePage extends StatelessWidget {
                                           ],
                                         ),
                                         Row(
-                                          children: const [
+                                          children: [
                                             Icon(
                                               Icons.local_gas_station_outlined,
                                               color: Colors.orange,
                                               size: 18,
                                             ),
                                             SizedBox(width: 4),
+                                            //salery
                                             Text(
-                                              "0.5 ر.س",
+                                              '${controller.result.toStringAsFixed(0)} EGP',
+                                              // '${(((controller.getloc()[index] * 1.25) / 1000)).toDouble() * controllerCar.calculate().tos}',
+                                              // '${((controller.getloc()[index] * 1.25).toStringAsFixed(0) * controllerCar.calculate()).toStringAsFixed(0)} EGP',
                                               style: TextStyle(
                                                 color: Colors.black54,
                                                 fontSize: 14,
@@ -642,7 +681,7 @@ class BestRoutePage extends StatelessWidget {
                                           ],
                                         ),
                                         Row(
-                                          children: const [
+                                          children: [
                                             Icon(
                                               Icons.access_time,
                                               color: Colors.green,
@@ -650,7 +689,8 @@ class BestRoutePage extends StatelessWidget {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
-                                              "6 دقيقة",
+                                              '${controller.timer(rounded)}',
+                                              // "${((rounded / 70) * 60).toStringAsFixed(0)} دقيقة",
                                               style: TextStyle(
                                                 color: Colors.black54,
                                                 fontSize: 14,
@@ -674,7 +714,7 @@ class BestRoutePage extends StatelessWidget {
             ],
           ),
         ),
-     ),
-);
-}
+      ),
+    );
+  }
 }

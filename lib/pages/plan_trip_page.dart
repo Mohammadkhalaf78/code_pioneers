@@ -1,6 +1,3 @@
-import 'package:code_pioneers/pages/best_route_page.dart';
-import 'package:code_pioneers/pages/mycars.dart';
-import 'package:code_pioneers/service/my_car_page.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -88,12 +85,13 @@ class PlanTripPage extends StatelessWidget {
                     ),
                   ),
                 ),
-                
+
                 Positioned.fill(
                   top: 144,
                   child: GestureDetector(
                     onTap: () {
                       Get.toNamed('myCars');
+                    
                     },
                     child: Container(
                       margin: const EdgeInsets.only(left: 22, right: 22),

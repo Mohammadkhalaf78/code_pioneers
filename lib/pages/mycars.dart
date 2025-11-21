@@ -1,7 +1,6 @@
 import 'package:code_pioneers/Constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class MyCarsPage extends StatelessWidget {
   MyCarsPage({super.key});
@@ -105,7 +104,11 @@ class MyCarsPage extends StatelessWidget {
                 Positioned.fill(
                   top: 140,
                   child: InkWell(
-                    onTap: () => print('hello'),
+                    onTap: () {
+                  
+                      //   // showdialogAddCar(context)
+                      //   );
+                    },
                     child: Container(
                       height: 15,
                       margin: EdgeInsets.only(left: 25, right: 25),
@@ -162,7 +165,7 @@ class MyCarsPage extends StatelessWidget {
                         const Icon(
                           Icons.arrow_back,
                           color: Colors.green,
-                          size: 15
+                          size: 15,
                         ),
                         const SizedBox(width: 8),
                         Expanded(

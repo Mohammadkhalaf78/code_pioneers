@@ -1,12 +1,15 @@
 import 'package:code_pioneers/Constants/colors.dart';
 import 'package:code_pioneers/coordiantes.dart';
-import 'package:dartx/dartx.dart';
 import 'package:flutter/widgets.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class ControllerPlanTrip extends GetxController {
+  final Rx<double> totalKm = 0.0.obs;
+  double result = 0;
+  double value = 0;
+
   final color = ColorsConst();
 
   final addPlace = <String>[].obs;
@@ -46,10 +49,9 @@ class ControllerPlanTrip extends GetxController {
       }
     }
 
-    print("Coordinates fetched:");
-    for (var c in coords) {
-      print("${c.placeName}: (${c.latitude}, ${c.longitude})");
-    }
+    // for (var c in coords) {
+    //   print("${c.placeName}: (${c.latitude}, ${c.longitude})");
+    // }
 
     return coords;
   }
@@ -71,16 +73,26 @@ class ControllerPlanTrip extends GetxController {
           curLat = locs.first.latitude;
           curLong = locs.first.longitude;
         } else {
-          curLat = currentLat.value.isNotEmpty ? double.parse(currentLat.value) : 0;
-          curLong = currentLong.value.isNotEmpty ? double.parse(currentLong.value) : 0;
+          curLat = currentLat.value.isNotEmpty
+              ? double.parse(currentLat.value)
+              : 0;
+          curLong = currentLong.value.isNotEmpty
+              ? double.parse(currentLong.value)
+              : 0;
         }
       } catch (e) {
-        curLat = currentLat.value.isNotEmpty ? double.parse(currentLat.value) : 0;
-        curLong = currentLong.value.isNotEmpty ? double.parse(currentLong.value) : 0;
+        curLat = currentLat.value.isNotEmpty
+            ? double.parse(currentLat.value)
+            : 0;
+        curLong = currentLong.value.isNotEmpty
+            ? double.parse(currentLong.value)
+            : 0;
       }
     } else {
       if (currentLat.value.isEmpty || currentLong.value.isEmpty) {
-        print("Current location is empty, cannot sort. Please call getLocation() first.");
+        // print(
+        //   "Current location is empty, cannot sort. Please call getLocation() first.",
+        // );
         return coords;
       }
       curLat = double.parse(currentLat.value);
@@ -94,19 +106,31 @@ class ControllerPlanTrip extends GetxController {
     List<Coordiantes> remaining = List.from(coords);
     List<Coordiantes> ordered = [];
 
-    print("Starting sorting process...");
+    // print("Starting sorting process...");
 
     while (remaining.isNotEmpty) {
       remaining.sort((a, b) {
-        double distA = Geolocator.distanceBetween(curLat, curLong, a.latitude, a.longitude);
-        double distB = Geolocator.distanceBetween(curLat, curLong, b.latitude, b.longitude);
+        double distA = Geolocator.distanceBetween(
+          curLat,
+          curLong,
+          a.latitude,
+          a.longitude,
+        );
+        double distB = Geolocator.distanceBetween(
+          curLat,
+          curLong,
+          b.latitude,
+          b.longitude,
+        );
         return distA.compareTo(distB);
       });
 
       final nearest = remaining.first;
       ordered.add(nearest);
 
-      print("Nearest place selected: ${nearest.placeName} at (${nearest.latitude}, ${nearest.longitude})");
+      // print(
+      //   "Nearest place selected: ${nearest.placeName} at (${nearest.latitude}, ${nearest.longitude})",
+      // );
 
       curLat = nearest.latitude;
       curLong = nearest.longitude;
@@ -116,7 +140,7 @@ class ControllerPlanTrip extends GetxController {
 
     coords.value = ordered;
 
-    print("Final ordered list of places:");
+    // print("Final ordered list of places:");
     for (var i = 0; i < ordered.length; i++) {
       double dist;
       if (i == 0) {
@@ -136,7 +160,9 @@ class ControllerPlanTrip extends GetxController {
         );
       }
 
-      print("${i + 1}. ${ordered[i].placeName} (${ordered[i].latitude}, ${ordered[i].longitude}) - Distance from previous: ${dist.toStringAsFixed(2)} meters");
+      // print(
+      //   "${i + 1}. ${ordered[i].placeName} (${ordered[i].latitude}, ${ordered[i].longitude}) - Distance from previous: ${dist.toStringAsFixed(2)} meters",
+      // );
     }
 
     return ordered;
@@ -166,10 +192,7 @@ class ControllerPlanTrip extends GetxController {
     }
 
     if (permission == LocationPermission.deniedForever) {
-      Get.snackbar(
-        'Error',
-        'Location permissions are permanently denied.',
-      );
+      Get.snackbar('Error', 'Location permissions are permanently denied.');
       return;
     }
 
@@ -188,6 +211,69 @@ class ControllerPlanTrip extends GetxController {
 
     startLocationController.value.text = placeName.value;
 
-    print("Current location fetched: ${placeName.value} at (${currentLat.value}, ${currentLong.value})");
-}
+    // print(
+    //   "Current location fetched: ${placeName.value} at (${currentLat.value}, ${currentLong.value})",
+    // );
+  }
+
+  getloc() async {
+    List<double> distance = [];
+    for (var index = 0; index < coords.length; index++) {
+      final place = coords[index];
+
+      // حساب المسافة من المكان السابق
+      if (index == 0) {
+        distance.add(
+          Geolocator.distanceBetween(
+            double.parse(currentLat.value.isEmpty ? '0' : currentLat.value),
+            double.parse(currentLong.value.isEmpty ? '0' : currentLong.value),
+            place.latitude,
+            place.longitude,
+          ),
+        );
+      } else {
+        distance.add(
+          Geolocator.distanceBetween(
+            coords[index - 1].latitude,
+            coords[index - 1].longitude,
+            place.latitude,
+            place.longitude,
+          ),
+        );
+      }
+      distance = (distance);
+    }
+    return distance;
+  }
+
+  timer(double dis) {
+    int minutes = ((dis / 70) * 60).round();
+
+    if (minutes < 60) {
+      return "$minutes دقيقة";
+    } else {
+      int hours = minutes ~/ 60;
+      int mins = minutes % 60;
+
+      // لو مفيش دقايق، اعرض ساعات بس
+      if (mins == 0) {
+        return "$hours ساعة";
+      }
+
+      return "$hours ساعة و $mins د";
+    }
+  }
+
+  Future<double> total() async {
+    double newValue = 0;
+    for (var p in coords) {
+      if (p.distanceKm != null) {
+        await sortByNearestPath();
+        newValue += p.distanceKm!;
+      }
+      print('this is all distance in your app ${newValue}');
+      totalKm.value = newValue;
+    }
+    return totalKm.value;
+  }
 }
