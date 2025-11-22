@@ -260,7 +260,9 @@ class RegisterPage extends StatelessWidget {
                       SizedBox(height: 8,),
                       Center(
                         child: GestureDetector(
-                          onTap: (){},
+                          onTap: (){
+                            Navigator.pop(context);
+                          },
                           child: Text('تسجيل الدخول',
                           style: TextStyle(
                             color: Colors.blue,

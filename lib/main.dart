@@ -1,7 +1,9 @@
 import 'package:code_pioneers/pages/best_route_page.dart';
 import 'package:code_pioneers/pages/best_route_page.dart';
+import 'package:code_pioneers/pages/login_page.dart';
 import 'package:code_pioneers/pages/mycars.dart';
 import 'package:code_pioneers/pages/plan_trip_page.dart';
+import 'package:code_pioneers/pages/register_page.dart';
 import 'package:code_pioneers/pages/test_page.dart';
 import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
@@ -20,7 +22,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/PlanTripPage',
+      initialRoute: '/Login',
       getPages: [
         GetPage(
           name: '/PlanTripPage',
@@ -40,14 +42,14 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/myCars',
           page: () => MyCarsPage(),
-          
+        ),
+          GetPage(
+          name: '/register',
+          page: () => RegisterPage(),
         ),
         GetPage(
-          name: '/test',
-          page: () => TestPage(),
-          binding: BindingsBuilder((){
-            Get.put(ControllerCarDetials());
-          })
+          name: '/Login',
+          page: () => LoginPage(),
         ),
       ],
     );
