@@ -92,7 +92,6 @@ class PlanTripPage extends StatelessWidget {
                   child: GestureDetector(
                     onTap: () {
                       Get.toNamed('myCars');
-                    
                     },
                     child: Container(
                       margin: const EdgeInsets.only(left: 22, right: 22),
@@ -297,39 +296,78 @@ class PlanTripPage extends StatelessWidget {
                         const SizedBox(height: 12),
                         Row(
                           children: [
-                            ElevatedButton.icon(
-                              onPressed: () {
-                                if (controller
-                                    .controllerAddPlace
-                                    .text
-                                    .isNotEmpty) {
-                                  controller.addPlace.add(
-                                    controller.controllerAddPlace.text,
-                                  );
-                                  controller.controllerAddPlace.clear();
-                                } else {
-                                  Get.snackbar(
-                                    'خطأ',
-                                    'يرجى إدخال اسم المكان',
-                                    snackPosition: SnackPosition.BOTTOM,
-                                    backgroundColor: Colors.redAccent,
-                                    colorText: Colors.white,
-                                  );
-                                }
-                              },
-                              icon: const Icon(Icons.add, color: Colors.white),
-                              label: const Text(
-                                'أضف',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: controller.color.primaryColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
+                            Obx(() {
+                              // نستخدم isFetchingAddress لمزامنة حالة التحميل
+                              final loading =
+                                  controller.isFetchingAddress.value;
+
+                              return ElevatedButton.icon(
+                                onPressed: loading
+                                    ? null
+                                    : () async {
+                                        // نقرأ النص أولاً
+                                        final text = controller
+                                            .controllerAddPlace
+                                            .text
+                                            .trim();
+
+                                        if (text.isEmpty) {
+                                          Get.snackbar(
+                                            'خطأ',
+                                            'يرجى إدخال اسم المكان',
+                                            snackPosition: SnackPosition.BOTTOM,
+                                            backgroundColor: Colors.redAccent,
+                                            colorText: Colors.white,
+                                          );
+                                          return;
+                                        }
+
+                                        // استدعاء الدالة المؤمنة
+                                        final added = await controller
+                                            .fetchCoordinates();
+
+                                        if (added) {
+                                          // فقط أضف للنصوص المعروضة إذا نجحنا في الحصول على إحداثيات
+                                          controller.addPlace.add(text);
+                                          controller.controllerAddPlace.clear();
+
+                                          // لو محتاج، تقدر تعيد حساب المسافات أو الـ total هنا
+                                          // await controller.computeAndStoreDistances(); // لو موجودة
+                                        }
+                                      },
+                                icon: loading
+                                    ? SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
+                                label: loading
+                                    ? const Text(
+                                        'جاري البحث...',
+                                        style: TextStyle(color: Colors.white),
+                                      )
+                                    : const Text(
+                                        'أضف',
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      controller.color.primaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 0,
                                 ),
-                                elevation: 0,
-                              ),
-                            ),
+                              );
+                            }),
+
                             const SizedBox(width: 12),
                             Expanded(
                               child: Container(
@@ -508,13 +546,14 @@ class PlanTripPage extends StatelessWidget {
                       }
 
                       // جلب الإحداثيات
-                      await controller.fetchCoordinates();
+                      // await controller.fetchCoordinates();
 
-                      // ترتيب المسار حسب أقرب مسافة باستخدام نقطة البداية
-                      await controller.sortByNearestPath(
-                        startLocation:
-                            controller.startLocationController.value.text,
-                      );
+                      // // ترتيب المسار حسب أقرب مسافة باستخدام نقطة البداية
+                      // await controller.sortByNearestPath(
+                      //   startLocation:
+                      //       controller.startLocationController.value.text,
+                      // );
+                      await controller.computeAll(); // هيرجع total كقيمة double
 
                       Get.snackbar(
                         'نجاح',

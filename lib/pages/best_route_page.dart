@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:get/instance_manager.dart';
 
@@ -246,6 +247,7 @@ class BestRoutePage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 15),
+                    // حساب الرحلة الاجمالية
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -287,73 +289,16 @@ class BestRoutePage extends StatelessWidget {
                                     ),
                                     const SizedBox(height: 5),
 
-                                    // Obx(
-                                    //   () {
-                                    //   double totalDistance = 0;
-                                    //   for (
-                                    //     var i = 0;
-                                    //     i < controller.coords.length;
-                                    //     i++
-                                    //   ) {
-                                    //     if (i == 0) {
-                                    //       totalDistance +=
-                                    //           Geolocator.distanceBetween(
-                                    //             double.parse(
-                                    //               controller
-                                    //                       .currentLat
-                                    //                       .value
-                                    //                       .isEmpty
-                                    //                   ? '0'
-                                    //                   : controller
-                                    //                         .currentLat
-                                    //                         .value,
-                                    //             ),
-                                    //             double.parse(
-                                    //               controller
-                                    //                       .currentLong
-                                    //                       .value
-                                    //                       .isEmpty
-                                    //                   ? '0'
-                                    //                   : controller
-                                    //                         .currentLong
-                                    //                         .value,
-                                    //             ),
-                                    //             controller.coords[i].latitude,
-                                    //             controller.coords[i].longitude,
-                                    //           );
-                                    //     } else {
-                                    //       totalDistance +=
-                                    //           Geolocator.distanceBetween(
-                                    //             controller
-                                    //                 .coords[i - 1]
-                                    //                 .latitude,
-                                    //             controller
-                                    //                 .coords[i - 1]
-                                    //                 .longitude,
-                                    //             controller.coords[i].latitude,
-                                    //             controller.coords[i].longitude,
-                                    //           );
-                                    //     }
-                                    //   }
-                                    //   return Text(
-                                    //     (totalDistance / 1000).toStringAsFixed(
-                                    //       2,
-                                    //     ),
-                                    //     style: const TextStyle(
-                                    //       fontSize: 20,
-                                    //       fontWeight: FontWeight.bold,
-                                    //       color: Colors.white,
-                                    //     ),
-                                    //   );
-                                    // }),
-                                    Obx(() => Text('${controller.totalKm()}',
+                                    Obx(
+                                      () => Text(
+                                        '${controller.totalKm .toStringAsFixed(1)}',
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.white,
-                                        ))),
-                                    //  Text('${controller.total().toString()}'),
-                                    //  Obx(()=>Text(controller.total())),
+                                        ),
+                                      ),
+                                    ),
                                     const Text(
                                       "كم",
                                       style: TextStyle(
@@ -405,17 +350,19 @@ class BestRoutePage extends StatelessWidget {
                                       ),
                                     ),
                                     const SizedBox(height: 5),
-                                    Text(
-                                      // '${controller.totalTime(rounded)}',
-                                      "2.0",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                    Obx(
+                                      () => Text(
+                                        '${(controller.totalKm.value * controllerCar.calculate()).toStringAsFixed(1)}',
+                                        style: const TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
                                     const Text(
-                                      "ر.س",
+                                      "جنيه",
+                                      
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -465,16 +412,20 @@ class BestRoutePage extends StatelessWidget {
                                       ),
                                     ),
                                     const SizedBox(height: 5),
-                                    const Text(
-                                      "25",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                  
+                                    Obx(
+                                      () => Text(
+                                        '${controller.timer(controller.totalKm.value)}',
+                                        style: const TextStyle(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
                                       ),
                                     ),
+                                  
                                     const Text(
-                                      "دقيقة",
+                                      "",
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -583,12 +534,26 @@ class BestRoutePage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final place = controller.coords[index];
 
-                        controller.value =
-                            ((controller.getloc()[index] * 1.25) / 1000);
-                        rounded = double.parse(
-                          controller.value.toStringAsFixed(2),
+                        // خذ المسافة المخزنة داخل الكائن (وهي بالكيلومتر حسب controller المنقح)
+                        // لو مش موجودة نخليها 0.0 مؤقتاً
+                        final double distanceKm = place.distanceKm ?? 0.0;
+
+                        // التطبيق القديم كان يضرب المسافة بمعامل 1.25 (زي فقدان/زيادة المسار)
+                        final double adjustedKm = distanceKm ;
+
+                        // تقريب للعرض وللحسابات (بدون تعديل حالة الـ controller)
+                        final double rounded = double.parse(
+                          adjustedKm.toStringAsFixed(2),
                         );
-                        controller.result = rounded * controllerCar.calculate();
+
+                        // احسب التكلفة (controllerCar.calculate() هي دالتك لحساب السعر لكل كم)
+                        final double itemCost =
+                            rounded * controllerCar.calculate();
+
+                        // لو عايز تعرض '-' بدل 0.0 لما المسافة مش متاحة:
+                        final String kmText = distanceKm > 0
+                            ? rounded.toStringAsFixed(1)
+                            : '—';
 
                         return Container(
                           width: double.infinity,
@@ -650,9 +615,7 @@ class BestRoutePage extends StatelessWidget {
                                             const SizedBox(width: 4),
                                             // km
                                             Text(
-                                              '${rounded.toStringAsFixed(1)}',
-                                              // '${currantlocation().toStringAsFixed(1)}',
-                                              // '${((controller.getloc()[index] * 1.25) / 1000).toStringAsFixed(2)} كم',
+                                              '$kmText', // عبارة عن قيمة أو '-' لو غير متوفرة
                                               style: const TextStyle(
                                                 color: Colors.black54,
                                                 fontSize: 12,
@@ -668,11 +631,9 @@ class BestRoutePage extends StatelessWidget {
                                               size: 18,
                                             ),
                                             SizedBox(width: 4),
-                                            //salery
+                                            // salary / cost
                                             Text(
-                                              '${controller.result.toStringAsFixed(0)} EGP',
-                                              // '${(((controller.getloc()[index] * 1.25) / 1000)).toDouble() * controllerCar.calculate().tos}',
-                                              // '${((controller.getloc()[index] * 1.25).toStringAsFixed(0) * controllerCar.calculate()).toStringAsFixed(0)} EGP',
+                                              '${itemCost.toStringAsFixed(0)} EGP',
                                               style: TextStyle(
                                                 color: Colors.black54,
                                                 fontSize: 14,
@@ -689,8 +650,8 @@ class BestRoutePage extends StatelessWidget {
                                             ),
                                             SizedBox(width: 4),
                                             Text(
+                                              // timer يتوقع المسافة بالكيلومتر كما في الكود السابق
                                               '${controller.timer(rounded)}',
-                                              // "${((rounded / 70) * 60).toStringAsFixed(0)} دقيقة",
                                               style: TextStyle(
                                                 color: Colors.black54,
                                                 fontSize: 14,
