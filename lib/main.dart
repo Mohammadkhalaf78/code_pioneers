@@ -1,6 +1,9 @@
 import 'package:code_pioneers/pages/best_route_page.dart';
 import 'package:code_pioneers/pages/best_route_page.dart';
+import 'package:code_pioneers/pages/mycars.dart';
 import 'package:code_pioneers/pages/plan_trip_page.dart';
+import 'package:code_pioneers/pages/test_page.dart';
+import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 
 import 'package:flutter/material.dart';
@@ -30,8 +33,21 @@ class MyApp extends StatelessWidget {
           name: '/BestRoutePage',
           page: () => BestRoutePage(),
           binding: BindingsBuilder(() {
-            Get.put(ControllerPlanTrip());
+            Get.put(ControllerPlanTrip(),);
+            Get.put(ControllerCarDetials());
           }),
+        ),
+        GetPage(
+          name: '/myCars',
+          page: () => MyCarsPage(),
+          
+        ),
+        GetPage(
+          name: '/test',
+          page: () => TestPage(),
+          binding: BindingsBuilder((){
+            Get.put(ControllerCarDetials());
+          })
         ),
       ],
     );
