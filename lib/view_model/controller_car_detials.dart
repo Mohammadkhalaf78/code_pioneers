@@ -31,7 +31,7 @@ class ControllerCarDetials extends GetxController {
 
     double modifier = 1 + ((cylinders - 4) * 0.15);
     gasolineCost = liter * modifier * literPrice / 100;
-    print('gasoline cost is $gasolineCost');
+    // print('gasoline cost is $gasolineCost');
 
     return gasolineCost;
   }
@@ -45,7 +45,7 @@ class ControllerCarDetials extends GetxController {
 
     oilPriceKm = (oilUsed / 10000);
 
-    print('oil price per km is $oilPriceKm');
+    // print('oil price per km is $oilPriceKm');
 
     return oilPriceKm;
   }
