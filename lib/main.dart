@@ -44,14 +44,6 @@ class MyApp extends StatelessWidget {
           name: '/register',
           page: () => RegisterPage(),
         ),
-<<<<<<< HEAD
-        // GetPage(
-        //   name: '/Login',
-        //   page: () => LoginPage(),
-        // ),
-=======
-      
->>>>>>> 70fc1db616941e2b63985f9abce9bd9931a54b8b
       ],
     );
   }
