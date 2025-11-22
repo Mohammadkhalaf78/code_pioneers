@@ -1,10 +1,7 @@
 import 'package:code_pioneers/pages/best_route_page.dart';
-import 'package:code_pioneers/pages/best_route_page.dart';
-import 'package:code_pioneers/pages/login_page.dart';
 import 'package:code_pioneers/pages/mycars.dart';
 import 'package:code_pioneers/pages/plan_trip_page.dart';
 import 'package:code_pioneers/pages/register_page.dart';
-import 'package:code_pioneers/pages/test_page.dart';
 import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 
@@ -22,7 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/Login',
+      initialRoute: '/PlanTripPage',
       getPages: [
         GetPage(
           name: '/PlanTripPage',
@@ -47,10 +44,10 @@ class MyApp extends StatelessWidget {
           name: '/register',
           page: () => RegisterPage(),
         ),
-        GetPage(
-          name: '/Login',
-          page: () => LoginPage(),
-        ),
+        // GetPage(
+        //   name: '/Login',
+        //   page: () => LoginPage(),
+        // ),
       ],
     );
   }
