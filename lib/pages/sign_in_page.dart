@@ -1,11 +1,12 @@
-import 'package:code_pioneers/pages/sign_in_page.dart';
+import 'package:code_pioneers/pages/plan_trip_page.dart';
+import 'package:code_pioneers/pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+class SignInPage extends StatelessWidget {
+  const SignInPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,19 +26,19 @@ class RegisterPage extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Icon(
-                    Icons.rocket_launch,
+                    Icons.directions_car,
                     color: Colors.redAccent,
                     size: 40,
                   ),
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'إنشاء حساب',
+                  'تسجيل الدخول',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
                 Text(
-                  'انضم إلينا اليوم',
+                  'أهلاً بعودتك',
                   style: TextStyle(
                     fontSize: 14,
                     color: const Color.fromARGB(255, 83, 82, 82),
@@ -62,47 +63,6 @@ class RegisterPage extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        'الإسم الكامل',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF5F7FA),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: TextField(
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'أدخل اسمك الكامل',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 14,
-                              horizontal: 16,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: const Color.fromARGB(255, 249, 245, 245),
-                                width: 0.5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: Colors.orange,
-                                width: 1.5,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 25),
                       Text(
                         'البريد الإلكتروني',
                         style: TextStyle(
@@ -160,8 +120,7 @@ class RegisterPage extends StatelessWidget {
                         child: TextField(
                           textAlign: TextAlign.right,
                           decoration: InputDecoration(
-                            hintText:
-                                'أدخل كلمة مرور قوية ( 8 أحرف علي الأقل )',
+                            hintText: 'أدخل كلمة المرور',
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(
@@ -190,57 +149,14 @@ class RegisterPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 25),
-                      Text(
-                        'تأكيد كلمة المرور',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF5F7FA),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: TextField(
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'أعد إدخال كلمة المرور',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 14,
-                              horizontal: 10,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: const Color.fromARGB(255, 249, 245, 245),
-                                width: 0.5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: Colors.orange,
-                                width: 1.5,
-                              ),
-                            ),
-                            prefixIcon: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.visibility, color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                      ),
+
                       SizedBox(height: 30),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            Get.to(() => SignInPage()
-                            );
+                            Get.to(() => PlanTripPage());
+
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.orange,
@@ -251,7 +167,7 @@ class RegisterPage extends StatelessWidget {
                             elevation: 0,
                           ),
                           child: Text(
-                            'إنشاء حساب',
+                            'دخول',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 18,
@@ -263,7 +179,7 @@ class RegisterPage extends StatelessWidget {
                       SizedBox(height: 40),
                       Center(
                         child: Text(
-                          'لديك حساب بالفعل؟',
+                          'ليس لديك حساب؟',
                           style: TextStyle(color: Colors.grey, fontSize: 15),
                           textAlign: TextAlign.center,
                         ),
@@ -272,10 +188,10 @@ class RegisterPage extends StatelessWidget {
                       Center(
                         child: GestureDetector(
                           onTap: () {
-                            Get.to(SignInPage());
+                            Get.to(RegisterPage());
                           },
                           child: Text(
-                            'تسجيل الدخول',
+                            'إنشاء حساب جديد',
                             style: TextStyle(
                               color: Colors.blue,
                               fontSize: 16,
@@ -287,9 +203,7 @@ class RegisterPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text(
-                  'بإنشاء حساب، أنت توافق على الشروط والأحكام و سياسة الخصوصية',
-                ),
+                Text('باستخدام التطبيق، أنت توافق على الشروط والأحكام'),
               ],
             ),
           ),
