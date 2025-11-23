@@ -1,9 +1,7 @@
 import 'package:code_pioneers/pages/plan_trip_page.dart';
 import 'package:code_pioneers/pages/register_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class SignInPage extends StatelessWidget {
   const SignInPage({super.key});
@@ -155,8 +153,7 @@ class SignInPage extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            Get.to(() => PlanTripPage());
-
+                            Get.toNamed('PlanTripPage');
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.orange,

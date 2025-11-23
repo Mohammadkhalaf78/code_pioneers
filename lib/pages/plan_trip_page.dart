@@ -1,4 +1,3 @@
-import 'package:code_pioneers/pages/best_route_page.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
