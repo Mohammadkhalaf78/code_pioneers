@@ -1,12 +1,12 @@
 import 'package:code_pioneers/Constants/colors.dart';
 import 'package:code_pioneers/coordiantes.dart';
-import 'package:flutter/widgets.dart';
+import 'package:dartx/dartx.dart';
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 
 class ControllerPlanTrip extends GetxController {
-  // --- State (مراقب ليتحدث الواجهة تلقائيًا) ---
   final Rx<double> totalKm = 0.0.obs;
 
   final color = ColorsConst();
@@ -23,88 +23,85 @@ class ControllerPlanTrip extends GetxController {
   final coords = <Coordiantes>[].obs;
 
   // حالة تحميل للدلال على البحث/التحقق
-final RxBool isFetchingAddress = false.obs;
-
+  final RxBool isFetchingAddress = false.obs;
 
   // ---------------------------------------------------------
   // 1) تحويل أسماء الأماكن إلى إحداثيات
   // ---------------------------------------------------------
-/// يحاول جلب إحداثيات النص الموجود في controllerAddPlace.text
-/// يعيد true لو تمت الإضافة بنجاح، false لو فشل أو كان مكررًا.
-Future<bool> fetchCoordinates() async {
-  final text = controllerAddPlace.text.trim();
+  /// يحاول جلب إحداثيات النص الموجود في controllerAddPlace.text
+  /// يعيد true لو تمت الإضافة بنجاح، false لو فشل أو كان مكررًا.
+  Future<bool> fetchCoordinates() async {
+    final text = controllerAddPlace.text.trim();
 
-  if (text.isEmpty) {
-    Get.snackbar(
-      'خطأ',
-      'يرجى إدخال اسم المكان',
-      snackPosition: SnackPosition.BOTTOM,
-      // backgroundColor: Colors.redAccent,
-      // colorText: Colors.white,
-    );
-    return false;
-  }
-
-  // حماية ضد التكرار: نقارن بالأسماء الموجودة سواء في coords أو addPlace
-  final existsInCoords = coords.any((c) => c.placeName.trim().toLowerCase() == text.toLowerCase());
-  final existsInAddPlace = addPlace.any((s) => s.trim().toLowerCase() == text.toLowerCase());
-
-  if (existsInCoords || existsInAddPlace) {
-    Get.snackbar(
-      'مكرر',
-      '"$text" موجود بالفعل',
-      snackPosition: SnackPosition.BOTTOM,
-      // backgroundColor: Colors.orange,
-      // colorText: Colors.white,
-    );
-    return false;
-  }
-
-  try {
-    isFetchingAddress.value = true;
-
-    // استدعاء geocoding
-    final locations = await locationFromAddress(text);
-
-    if (locations.isEmpty) {
+    if (text.isEmpty) {
       Get.snackbar(
-        'المكان غير موجود',
-        'تعذر العثور على "$text". جرّب كتابة اسم أدق أو إضافة المدينة.',
+        'خطأ',
+        'يرجى إدخال اسم المكان',
         snackPosition: SnackPosition.BOTTOM,
-        
+        // backgroundColor: Colors.redAccent,
+        // colorText: Colors.white,
       );
       return false;
     }
 
-    final loc = locations.first;
-
-    // أضف الإحداثيات إلى القائمة
-    coords.add(
-      Coordiantes(
-        placeName: text,
-        latitude: loc.latitude,
-        longitude: loc.longitude,
-      ),
+    // حماية ضد التكرار: نقارن بالأسماء الموجودة سواء في coords أو addPlace
+    final existsInCoords = coords.any(
+      (c) => c.placeName.trim().toLowerCase() == text.toLowerCase(),
+    );
+    final existsInAddPlace = addPlace.any(
+      (s) => s.trim().toLowerCase() == text.toLowerCase(),
     );
 
-    return true;
-  } on Exception catch (e) {
-    final msg = e.toString();
-    String message = 'حدث خطأ غير متوقع. حاول مرة أخرى.';
-    if (msg.contains('SocketException') || msg.contains('Network')) {
-      message = 'فشل الاتصال بالإنترنت. تأكد من الشبكة وحاول مرة أخرى.';
+    if (existsInCoords || existsInAddPlace) {
+      Get.snackbar(
+        'مكرر',
+        '"$text" موجود بالفعل',
+        snackPosition: SnackPosition.BOTTOM,
+        // backgroundColor: Colors.orange,
+        // colorText: Colors.white,
+      );
+      return false;
     }
-    Get.snackbar(
-      'خطأ',
-      message,
-      snackPosition: SnackPosition.BOTTOM,
-    
-    );
-    return false;
-  } finally {
-    isFetchingAddress.value = false;
+
+    try {
+      isFetchingAddress.value = true;
+
+      // استدعاء geocoding
+      final locations = await locationFromAddress(text);
+
+      if (locations.isEmpty) {
+        Get.snackbar(
+          'المكان غير موجود',
+          'تعذر العثور على "$text". جرّب كتابة اسم أدق أو إضافة المدينة.',
+          snackPosition: SnackPosition.BOTTOM,
+        );
+        return false;
+      }
+
+      final loc = locations.first;
+
+      // أضف الإحداثيات إلى القائمة
+      coords.add(
+        Coordiantes(
+          placeName: text,
+          latitude: loc.latitude,
+          longitude: loc.longitude,
+        ),
+      );
+
+      return true;
+    } on Exception catch (e) {
+      final msg = e.toString();
+      String message = 'حدث خطأ غير متوقع. حاول مرة أخرى.';
+      if (msg.contains('SocketException') || msg.contains('Network')) {
+        message = 'فشل الاتصال بالإنترنت. تأكد من الشبكة وحاول مرة أخرى.';
+      }
+      Get.snackbar('خطأ', message, snackPosition: SnackPosition.BOTTOM);
+      return false;
+    } finally {
+      isFetchingAddress.value = false;
+    }
   }
-}
 
   // ---------------------------------------------------------
   // 2) حساب المسار الأمثل: ترتيب الأماكن حسب أقرب مسافة
@@ -252,7 +249,9 @@ Future<bool> fetchCoordinates() async {
     for (var c in coords) {
       if (c.distanceKm != null) {
         total += c.distanceKm!;
-        print(  'Added ${c.distanceKm} km from ${c.placeName}, total now $total km');
+        print(
+          'Added ${c.distanceKm} km from ${c.placeName}, total now $total km',
+        );
       }
     }
 
@@ -269,11 +268,6 @@ Future<bool> fetchCoordinates() async {
       await getLocation();
     }
 
-    // 2) احصل على الإحداثيات من العناوين إذا لزم
-    // if (coords.isEmpty) {
-    //   await fetchCoordinates();
-    // }
-
     // 3) رتب المسار (اختياري لكن يفضَّل قبل حساب المسافات)
     await sortByNearestPath(startLocation: startLocation);
 
@@ -283,6 +277,109 @@ Future<bool> fetchCoordinates() async {
     // 5) اجمع القيم وأعد الناتج
     final double total = computeTotalFromCoords();
     return total;
+  }
+
+  Future<double> computeYourPath() async {
+    await yourPath();
+
+    // 4) احسب وخزن المسافات داخل الكائنات
+    computeAndStoreDistances();
+
+    // 5) اجمع القيم وأعد الناتج
+    final double total = computeTotalFromCoords();
+    return total;
+  }
+
+  Future<List<Coordiantes>> yourPath() async {
+    Get.snackbar('نجاح', 'تم إنشاء مسارك بناءً على مدخلاتك');
+
+    for (var coord in coords) {
+      coord.distanceKm = null; // Clear previous distance data
+    }
+
+    final startlocatio = Geolocator.distanceBetween(
+      currentLat.value.toDouble(),
+      currentLong.value.toDouble(),
+      coords[0].latitude,
+      coords[0].longitude,
+    );
+
+    coords[0].distanceKm = (startlocatio * 1.25) / 1000.0;
+
+    for (var i = 1; i < coords.length; i++) {
+      final distanceMeters = Geolocator.distanceBetween(
+        coords[i - 1].latitude,
+        coords[i - 1].longitude,
+        coords[i].latitude,
+        coords[i].longitude,
+      );
+
+      coords[i].distanceKm = (distanceMeters * 1.25) / 1000.0;
+    }
+
+    return coords;
+  }
+
+  void showSimDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => SimpleDialog(
+        title: const Text('اي من الاتي تفضل', textAlign: TextAlign.center),
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    color.primaryColor,
+                  ),
+                ),
+                onPressed: () async {
+                  if (addPlace.isEmpty) {
+                    Get.snackbar('خطأ', 'يرجى إضافة وجهة واحدة على الأقل');
+                    return;
+                  }
+
+                  // لو نقطة البداية فاضية، نجيب الموقع الحالي
+                  if (startLocationController.value.text.isEmpty) {
+                    await getLocation();
+                  }
+
+                  await computeAll(); // هيرجع total كقيمة double
+
+                  Get.snackbar('نجاح', 'تم إنشاء أفضل مسار بناءً على مدخلاتك');
+
+                  // الانتقال لصفحة أفضل مسار
+                  Get.toNamed('BestRoutePage');
+                },
+                child: Text('افضل مسار', style: TextStyle(color: Colors.white)),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  if (addPlace.isEmpty) {
+                    Get.snackbar('خطأ', 'يرجى إضافة وجهة واحدة على الأقل');
+                    return;
+                  }
+
+                  // لو نقطة البداية فاضية، نجيب الموقع الحالي
+                  if (startLocationController.value.text.isEmpty) {
+                    await getLocation();
+                  }
+
+                  await computeYourPath();
+
+                  Get.toNamed('BestRoutePage');
+
+                },
+
+                child: Text(' مسارك'),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   // ---------------------------------------------------------

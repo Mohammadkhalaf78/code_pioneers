@@ -530,43 +530,15 @@ class PlanTripPage extends StatelessWidget {
                   // Create best route button - التعديل هنا
                   ElevatedButton.icon(
                     onPressed: () async {
-                      if (controller.addPlace.isEmpty) {
-                        Get.snackbar('خطأ', 'يرجى إضافة وجهة واحدة على الأقل');
-                        return;
-                      }
-
-                      // لو نقطة البداية فاضية، نجيب الموقع الحالي
-                      if (controller
-                          .startLocationController
-                          .value
-                          .text
-                          .isEmpty) {
-                        await controller.getLocation();
-                      }
-
-                      // جلب الإحداثيات
-                      // await controller.fetchCoordinates();
-
-                      // // ترتيب المسار حسب أقرب مسافة باستخدام نقطة البداية
-                      // await controller.sortByNearestPath(
-                      //   startLocation:
-                      //       controller.startLocationController.value.text,
-                      // );
-                      await controller.computeAll(); // هيرجع total كقيمة double
-
-                      Get.snackbar(
-                        'نجاح',
-                        'تم إنشاء أفضل مسار بناءً على مدخلاتك',
-                      );
-
-                      // الانتقال لصفحة أفضل مسار
-                      Get.toNamed('BestRoutePage');
+                      controller.showSimDialog(context);
+                    
+                      
                     },
                     icon: const Icon(Icons.alt_route, color: Colors.white),
                     label: const Padding(
                       padding: EdgeInsets.symmetric(vertical: 14.0),
                       child: Text(
-                        'إنشاء أفضل مسار',
+                        'إنشاء مسارك',
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),

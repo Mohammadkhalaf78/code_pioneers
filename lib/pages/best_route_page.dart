@@ -3,8 +3,6 @@ import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/instance_manager.dart';
 
 // ignore: must_be_immutable
 class BestRoutePage extends StatelessWidget {
@@ -16,16 +14,10 @@ class BestRoutePage extends StatelessWidget {
   double rounded = 0;
 
   // اختياري: ممكن تضيفي زر لتحديث المسار عند الضغط
-  Future<void> _updateRoute() async {
-    await controller.sortByNearestPath(
-      startLocation: controller.startLocationController.value.text,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
     // ممكن تعمل تحديث للمسار عند دخول الصفحة
-    _updateRoute();
 
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -291,7 +283,7 @@ class BestRoutePage extends StatelessWidget {
 
                                     Obx(
                                       () => Text(
-                                        '${controller.totalKm .toStringAsFixed(1)}',
+                                        '${controller.totalKm.toStringAsFixed(1)}',
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -362,7 +354,7 @@ class BestRoutePage extends StatelessWidget {
                                     ),
                                     const Text(
                                       "جنيه",
-                                      
+
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -412,7 +404,7 @@ class BestRoutePage extends StatelessWidget {
                                       ),
                                     ),
                                     const SizedBox(height: 5),
-                                  
+
                                     Obx(
                                       () => Text(
                                         '${controller.timer(controller.totalKm.value)}',
@@ -423,7 +415,7 @@ class BestRoutePage extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                  
+
                                     const Text(
                                       "",
                                       style: TextStyle(
@@ -534,23 +526,17 @@ class BestRoutePage extends StatelessWidget {
                       itemBuilder: (context, index) {
                         final place = controller.coords[index];
 
-                        // خذ المسافة المخزنة داخل الكائن (وهي بالكيلومتر حسب controller المنقح)
-                        // لو مش موجودة نخليها 0.0 مؤقتاً
                         final double distanceKm = place.distanceKm ?? 0.0;
-
-                        // التطبيق القديم كان يضرب المسافة بمعامل 1.25 (زي فقدان/زيادة المسار)
-                        final double adjustedKm = distanceKm ;
 
                         // تقريب للعرض وللحسابات (بدون تعديل حالة الـ controller)
                         final double rounded = double.parse(
-                          adjustedKm.toStringAsFixed(2),
+                          distanceKm.toStringAsFixed(2),
                         );
 
-                        // احسب التكلفة (controllerCar.calculate() هي دالتك لحساب السعر لكل كم)
+                        // احسب التكلفة )
                         final double itemCost =
                             rounded * controllerCar.calculate();
 
-                        // لو عايز تعرض '-' بدل 0.0 لما المسافة مش متاحة:
                         final String kmText = distanceKm > 0
                             ? rounded.toStringAsFixed(1)
                             : '—';

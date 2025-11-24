@@ -1,4 +1,5 @@
 import 'package:code_pioneers/pages/best_route_page.dart';
+import 'package:code_pioneers/pages/my_car_page.dart';
 import 'package:code_pioneers/pages/mycars.dart';
 import 'package:code_pioneers/pages/plan_trip_page.dart';
 import 'package:code_pioneers/pages/register_page.dart';
@@ -48,6 +49,10 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/SignInPage',
           page: () => SignInPage(),
+        ),
+        GetPage(
+          name: '/MyCarPage',
+          page: () => MyCarPage(),
         ),
       ],
     );

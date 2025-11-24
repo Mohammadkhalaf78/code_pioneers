@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/utils.dart';
 
 class MyCarPage extends StatelessWidget {
   const MyCarPage({super.key});
@@ -35,25 +37,28 @@ class MyCarPage extends StatelessWidget {
                     children: [
                       Align(
                         alignment: Alignment.topRight,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () {},
-                              icon: Icon(
+                        child: InkWell(
+                          onTap: () {
+                            Get.toNamed('myCars');
+                          },
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
                                 Icons.arrow_back,
                                 color: Colors.white,
                                 size: 18,
                               ),
-                            ),
-                            Text(
-                              'رجوع',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
+
+                              Text(
+                                'رجوع',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(height: 10),

@@ -105,8 +105,6 @@ class MyCarsPage extends StatelessWidget {
                   top: 140,
                   child: InkWell(
                     // onTap: () => showAddCarDialog(context),
-
-                  
                     child: Container(
                       height: 15,
                       margin: EdgeInsets.only(left: 25, right: 25),
@@ -143,7 +141,9 @@ class MyCarsPage extends StatelessWidget {
               itemCount: 2,
               itemBuilder: (ctx, index) {
                 return GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    Get.toNamed('MyCarPage');
+                  },
                   child: Container(
                     margin: const EdgeInsets.only(left: 22, right: 22, top: 20),
                     padding: const EdgeInsets.all(11),
