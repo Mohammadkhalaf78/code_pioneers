@@ -323,8 +323,6 @@ class ControllerPlanTrip extends GetxController {
 
   void showSimDialog(BuildContext context, Car car) {
     showDialog(
-
-  ddfasd
       context: context,
       builder: (context) => SimpleDialog(
         title: const Text('اي من الاتي تفضل', textAlign: TextAlign.center),
