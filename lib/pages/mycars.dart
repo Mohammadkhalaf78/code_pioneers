@@ -1,10 +1,13 @@
 import 'package:code_pioneers/Constants/colors.dart';
+import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
 class MyCarsPage extends StatelessWidget {
   MyCarsPage({super.key});
   final colors = ColorsConst();
+  final controller = Get.put(ControllerCarDetials());
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +107,7 @@ class MyCarsPage extends StatelessWidget {
                 Positioned.fill(
                   top: 140,
                   child: InkWell(
-                    // onTap: () => showAddCarDialog(context),
+                    onTap: () => controller.showAddCarDialog(context),
                     child: Container(
                       height: 15,
                       margin: EdgeInsets.only(left: 25, right: 25),
@@ -134,93 +137,155 @@ class MyCarsPage extends StatelessWidget {
                 ),
               ],
             ),
+            Obx(
+              () => controller.car.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 80.0),
+                      child: Column(
+                        children: const [
+                          Icon(
+                            Icons.directions_car,
+                            size: 80,
+                            color: Colors.grey,
+                          ),
+                          SizedBox(height: 16),
+                          Text(
+                            'لم تقم بإضافة أي سيارة بعد',
+                            style: TextStyle(fontSize: 16, color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ListView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: controller.car.length,
+                      itemBuilder: (ctx, index) {
+                        final item = controller.car[index];
+                        return Slidable(
+                          startActionPane: ActionPane(
+                            motion: const StretchMotion(),
+                            children: [
+                              SlidableAction(
+                                icon: Icons.details_outlined,
+                                backgroundColor: Colors.green,
+                                onPressed: (context) {
+                                  // controller.car.removeAt(index);
+                                  Get.toNamed('MyCarPage', arguments: item);
+                                },
+                              ),
+                            ],
+                          ),
+                          endActionPane: ActionPane(
+                            motion: const StretchMotion(),
+                            children: [
+                              SlidableAction(
+                                icon: Icons.delete,
+                                foregroundColor: Colors.red,
+                                backgroundColor: const Color.fromARGB(
+                                  0,
+                                  255,
+                                  255,
+                                  255,
+                                ),
 
-            ListView.builder(
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              itemCount: 2,
-              itemBuilder: (ctx, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Get.toNamed('MyCarPage');
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 22, right: 22, top: 20),
-                    padding: const EdgeInsets.all(11),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(14),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
-                          blurRadius: 12,
-                          offset: const Offset(0.06, 6),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.arrow_back,
-                          color: Colors.green,
-                          size: 15,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: const [
-                              Text(
-                                'سيارتي',
-                                style: TextStyle(
+                                onPressed: (context) {
+                                  controller.car.removeAt(index);
+                                },
+                              ),
+                            ],
+                          ),
+
+                          child: Container(
+                            margin: const EdgeInsets.only(
+                              left: 22,
+                              right: 22,
+                              top: 20,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(14),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.06),
+                                  blurRadius: 12,
+                                  offset: const Offset(0.06, 6),
+                                ),
+                              ],
+                            ),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.all(11),
+
+                              leading: const Icon(
+                                Icons.arrow_back,
+                                color: Colors.green,
+                                size: 18,
+                              ),
+
+                              // النصوص اللي كانت جوه الـ Column
+                              title: Text(
+                                '${controller.car[index].carName} ',
+                                textAlign: TextAlign.right,
+                                style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
                                 ),
                               ),
-                              SizedBox(height: 4),
-                              Text(
-                                'كامري • 7.5 لتر/100كم',
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 12,
-                                ),
-                              ),
-                              SizedBox(height: 7),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
+                                  const SizedBox(height: 4),
                                   Text(
-                                    '7.5 لتر ',
+                                    'Model:${controller.car[index].year}.Cc:${controller.car[index].cc}',
                                     style: TextStyle(
                                       color: Colors.black54,
                                       fontSize: 12,
                                     ),
+                                    textAlign: TextAlign.right,
                                   ),
-                                  Icon(
-                                    Icons.local_gas_station,
-                                    size: 14,
-                                    color: Colors.orange,
+                                  const SizedBox(height: 7),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'clinder:${controller.car[index].cylinders}',
+                                        style: TextStyle(
+                                          color: Colors.black54,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                      SizedBox(width: 4),
+                                      Icon(
+                                        Icons.power_settings_new_rounded,
+                                        size: 14,
+                                        color: Colors.orange,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
+
+                              // الآيقونة اللي كانت آخر حاجة في Row (CircleAvatar)
+                              trailing: CircleAvatar(
+                                radius: 18,
+                                backgroundColor: Colors.blue.shade100,
+                                child: const Icon(
+                                  Icons.directions_car,
+                                  color: Colors.red,
+                                  size: 22,
+                                ),
+                              ),
+
+                              // الضغط على العنصر كله
+                              onTap: () {
+                                Get.toNamed('PlanTripPage',arguments:item  );
+                              },
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 12),
-                        CircleAvatar(
-                          radius: 18,
-                          backgroundColor: Colors.blue.shade100,
-                          child: const Icon(
-                            Icons.directions_car,
-                            color: Colors.red,
-                            size: 25,
-                          ),
-                        ),
-                      ],
+                        );
+                      },
                     ),
-                  ),
-                );
-              },
             ),
           ],
         ),

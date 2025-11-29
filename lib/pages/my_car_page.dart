@@ -1,10 +1,14 @@
+import 'package:code_pioneers/car.dart';
+import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/utils.dart';
 
 class MyCarPage extends StatelessWidget {
-  const MyCarPage({super.key});
+  MyCarPage({super.key});
 
+  final controller = Get.put(ControllerCarDetials());
+
+  final Car car = Get.arguments as Car;
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -81,7 +85,7 @@ class MyCarPage extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'سيارتي',
+                                '${car.carName}',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20,
@@ -90,7 +94,7 @@ class MyCarPage extends StatelessWidget {
                               ),
                               SizedBox(height: 4),
                               Text(
-                                'تويوتا كامري . 2020',
+                                '${car.year}',
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: 14,
@@ -161,7 +165,7 @@ class MyCarPage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "7.5",
+                                    "${(controller.fuelConsumption()*10).toStringAsFixed(1)}",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
@@ -196,7 +200,7 @@ class MyCarPage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "45,000",
+                                    "${car.carOdometer}",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
@@ -231,7 +235,7 @@ class MyCarPage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "17.5",
+                                    "${(controller.calculate()*100).toStringAsFixed(1)}",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
@@ -239,7 +243,7 @@ class MyCarPage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 6),
                                   Text(
-                                    "رس/100كم",
+                                    "جنيه/100كم",
                                     style: TextStyle(
                                       color: Colors.black54,
                                       fontSize: 12,
@@ -266,7 +270,7 @@ class MyCarPage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "2500",
+                                    "${car.cc}",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,

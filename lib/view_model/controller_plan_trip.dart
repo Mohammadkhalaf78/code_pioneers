@@ -1,4 +1,5 @@
 import 'package:code_pioneers/Constants/colors.dart';
+import 'package:code_pioneers/car.dart';
 import 'package:code_pioneers/coordiantes.dart';
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
@@ -320,7 +321,7 @@ class ControllerPlanTrip extends GetxController {
     return coords;
   }
 
-  void showSimDialog(BuildContext context) {
+  void showSimDialog(BuildContext context, Car car) {
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(

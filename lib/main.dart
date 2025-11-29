@@ -53,6 +53,11 @@ class MyApp extends StatelessWidget {
         GetPage(
           name: '/MyCarPage',
           page: () => MyCarPage(),
+            binding: BindingsBuilder(() {
+            Get.put(ControllerCarDetials());
+          }),
+          
+
         ),
       ],
     );

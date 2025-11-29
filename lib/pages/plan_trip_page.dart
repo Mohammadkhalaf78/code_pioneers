@@ -1,3 +1,4 @@
+import 'package:code_pioneers/car.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,16 @@ import 'package:get/get.dart';
 class PlanTripPage extends StatelessWidget {
   PlanTripPage({super.key});
 
+  final Car car =
+      Get.arguments ??
+      Car(
+        carName: 'افتراضي',
+        year: 2000,
+        cc: 1600,
+        cylinders: 4,
+        carOdometer: 12350,
+        literPrice: 19,
+      );
   final controller = Get.find<ControllerPlanTrip>();
 
   @override
@@ -116,9 +127,9 @@ class PlanTripPage extends StatelessWidget {
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.end,
-                              children: const [
+                              children: [
                                 Text(
-                                  'سيارتي',
+                                  '${car.carName}',
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 12,
@@ -530,9 +541,7 @@ class PlanTripPage extends StatelessWidget {
                   // Create best route button - التعديل هنا
                   ElevatedButton.icon(
                     onPressed: () async {
-                      controller.showSimDialog(context);
-                    
-                      
+                      controller.showSimDialog(context , car);
                     },
                     icon: const Icon(Icons.alt_route, color: Colors.white),
                     label: const Padding(
@@ -550,6 +559,7 @@ class PlanTripPage extends StatelessWidget {
                       elevation: 0,
                     ),
                   ),
+                
                   const SizedBox(height: 40),
                 ],
               ),

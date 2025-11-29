@@ -40,6 +40,7 @@ dependencies:
   geocoding: ^4.0.0
   geolocator: ^14.0.2
   flutter_selectable_cards: ^0.0.2
+  flutter_slidable: ^4.0.3
 
 dev_dependencies:
   flutter_test:
