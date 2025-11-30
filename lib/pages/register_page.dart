@@ -1,11 +1,17 @@
+
 import 'package:code_pioneers/pages/sign_in_page.dart';
+import 'package:code_pioneers/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+  RegisterPage({super.key});
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final service = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -117,6 +123,7 @@ class RegisterPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: TextField(
+                          controller: emailController,
                           textAlign: TextAlign.right,
                           decoration: InputDecoration(
                             hintText: 'example@gmail.com',
@@ -158,6 +165,7 @@ class RegisterPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: TextField(
+                          controller: passwordController,
                           textAlign: TextAlign.right,
                           decoration: InputDecoration(
                             hintText:
@@ -237,28 +245,70 @@ class RegisterPage extends StatelessWidget {
                       SizedBox(height: 30),
                       SizedBox(
                         width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Get.to(() => SignInPage()
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
-                            padding: EdgeInsets.symmetric(vertical: 18),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                        child:
+                            // ElevatedButton(
+                            //   onPressed: () {
+                            //     Get.to(() => SignInPage()
+                            //     );
+                            //   },
+                            //   style: ElevatedButton.styleFrom(
+                            //     backgroundColor: Colors.orange,
+                            //     padding: EdgeInsets.symmetric(vertical: 18),
+                            //     shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(20),
+                            //     ),
+                            //     elevation: 0,
+                            //   ),
+                            //   child: Text(
+                            //     'إنشاء حساب',
+                            //     style: TextStyle(
+                            //       color: Colors.white,
+                            //       fontSize: 18,
+                            //       fontWeight: FontWeight.w600,
+                            //     ),
+                            //   ),
+                            // ),
+                            // Register Button
+                            ElevatedButton(
+                              onPressed: () async {
+                                final result = await service.register(
+                                  emailController.text.trim(),
+                                  passwordController.text.trim(),
+                                );
+
+                                if (result) {
+                                  Get.snackbar(
+                                    'Register',
+                                    'Account created successfully!',
+                                    backgroundColor: const Color(0xFF67C090),
+                                    colorText: Colors.white,
+                                  );
+                                } else {
+                                  Get.snackbar(
+                                    'Error',
+                                    'Error saving data',
+                                    backgroundColor: Colors.redAccent,
+                                    colorText: Colors.white,
+                                  );
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange,
+                                padding: EdgeInsets.symmetric(vertical: 18),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'إنشاء حساب',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
-                            elevation: 0,
-                          ),
-                          child: Text(
-                            'إنشاء حساب',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
                       ),
                       SizedBox(height: 40),
                       Center(

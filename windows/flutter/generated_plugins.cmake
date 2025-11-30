@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  app_links
   flutter_selectable_cards
   geolocator_windows
   url_launcher_windows

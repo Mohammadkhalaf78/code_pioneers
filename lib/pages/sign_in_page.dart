@@ -1,10 +1,17 @@
+
 import 'package:code_pioneers/pages/plan_trip_page.dart';
 import 'package:code_pioneers/pages/register_page.dart';
+import 'package:code_pioneers/service/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class SignInPage extends StatelessWidget {
-  const SignInPage({super.key});
+  SignInPage({super.key});
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  final service = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +82,7 @@ class SignInPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: TextField(
+                          controller: emailController,
                           textAlign: TextAlign.right,
                           decoration: InputDecoration(
                             hintText: 'example@gmail.com',
@@ -116,6 +124,7 @@ class SignInPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: TextField(
+                          controller: passwordController,
                           textAlign: TextAlign.right,
                           decoration: InputDecoration(
                             hintText: 'أدخل كلمة المرور',
@@ -151,27 +160,71 @@ class SignInPage extends StatelessWidget {
                       SizedBox(height: 30),
                       SizedBox(
                         width: double.infinity,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Get.toNamed('PlanTripPage');
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.orange,
-                            padding: EdgeInsets.symmetric(vertical: 18),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(20),
+                        child:
+                            // ElevatedButton(
+                            //   onPressed: () {
+                            //     Get.toNamed('PlanTripPage');
+                            //   },
+                            //   style: ElevatedButton.styleFrom(
+                            //     backgroundColor: Colors.orange,
+                            //     padding: EdgeInsets.symmetric(vertical: 18),
+                            //     shape: RoundedRectangleBorder(
+                            //       borderRadius: BorderRadius.circular(20),
+                            //     ),
+                            //     elevation: 0,
+                            //   ),
+                            //   child: Text(
+                            //     'دخول',
+                            //     style: TextStyle(
+                            //       color: Colors.white,
+                            //       fontSize: 18,
+                            //       fontWeight: FontWeight.w600,
+                            //     ),
+                            //   ),
+                            // ),
+                            ElevatedButton(
+                              onPressed: () async {
+                                final result = await service.login(
+                                  emailController.text,
+                                  passwordController.text,
+                                );
+                                Get.snackbar('result', result ? 'succesfully' : 'failed');
+
+                                // if (result == true ) {
+                                //   Get.snackbar(
+                                //     'Success',
+                                //     'Logged in successfully!',
+                                //     backgroundColor: const Color(0xFF67C090),
+                                //     colorText: Colors.white,
+                                //   );
+                                // } else {
+                                //   Get.snackbar(
+                                //     'Error',
+                                //     'Invalid credentials',
+                                //     backgroundColor: Colors.redAccent,
+                                //     colorText: Colors.white,
+                                //   );
+                                // }
+                                Get.toNamed('PlanTripPage');
+                              },
+
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.orange,
+                                padding: EdgeInsets.symmetric(vertical: 18),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                elevation: 0,
+                              ),
+                              child: Text(
+                                'دخول',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
                             ),
-                            elevation: 0,
-                          ),
-                          child: Text(
-                            'دخول',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
                       ),
                       SizedBox(height: 40),
                       Center(
