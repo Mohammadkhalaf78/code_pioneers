@@ -1,10 +1,12 @@
 import 'package:code_pioneers/car.dart';
+import 'package:code_pioneers/service/auth_service.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class PlanTripPage extends StatelessWidget {
   PlanTripPage({super.key});
+  final authService = AuthService();
 
   final Car car =
       Get.arguments ??
@@ -54,10 +56,25 @@ class PlanTripPage extends StatelessWidget {
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                          IconButton(
+                          onPressed: () {
+                            authService.logout();
+                            Get.snackbar(
+                              'logout',
+                              'تم تسجيل الخروج بنجاح',
+                              snackPosition: SnackPosition.BOTTOM,
+                              backgroundColor: Colors.green,
+                              colorText: Colors.white,
+                            );
+                            Get.offAllNamed('SignInPage');
+                          },
+                          icon: Icon(Icons.logout, color: Colors.white),
+                        ),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: const [
+                              
                               SizedBox(width: 6),
                               Text(
                                 'خطط لرحلتك',
@@ -75,6 +92,7 @@ class PlanTripPage extends StatelessWidget {
                                   fontSize: 16,
                                 ),
                               ),
+                            
                             ],
                           ),
                         ),
@@ -92,6 +110,7 @@ class PlanTripPage extends StatelessWidget {
                             size: 28,
                           ),
                         ),
+                      
                       ],
                     ),
                   ),
@@ -541,7 +560,7 @@ class PlanTripPage extends StatelessWidget {
                   // Create best route button - التعديل هنا
                   ElevatedButton.icon(
                     onPressed: () async {
-                      controller.showSimDialog(context , car);
+                      controller.showSimDialog(context, car);
                     },
                     icon: const Icon(Icons.alt_route, color: Colors.white),
                     label: const Padding(
@@ -559,7 +578,7 @@ class PlanTripPage extends StatelessWidget {
                       elevation: 0,
                     ),
                   ),
-                
+
                   const SizedBox(height: 40),
                 ],
               ),

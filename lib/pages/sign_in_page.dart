@@ -1,4 +1,3 @@
-
 import 'package:code_pioneers/pages/plan_trip_page.dart';
 import 'package:code_pioneers/pages/register_page.dart';
 import 'package:code_pioneers/service/auth_service.dart';
@@ -188,24 +187,27 @@ class SignInPage extends StatelessWidget {
                                   emailController.text,
                                   passwordController.text,
                                 );
-                                Get.snackbar('result', result ? 'succesfully' : 'failed');
+                                Get.snackbar(
+                                  'result',
+                                  result ? 'succesfully' : 'failed',
+                                );
 
-                                // if (result == true ) {
-                                //   Get.snackbar(
-                                //     'Success',
-                                //     'Logged in successfully!',
-                                //     backgroundColor: const Color(0xFF67C090),
-                                //     colorText: Colors.white,
-                                //   );
-                                // } else {
-                                //   Get.snackbar(
-                                //     'Error',
-                                //     'Invalid credentials',
-                                //     backgroundColor: Colors.redAccent,
-                                //     colorText: Colors.white,
-                                //   );
-                                // }
-                                Get.toNamed('PlanTripPage');
+                                if (result == true) {
+                                  Get.snackbar(
+                                    'Success',
+                                    'Logged in successfully!',
+                                    backgroundColor: const Color(0xFF67C090),
+                                    colorText: Colors.white,
+                                  );
+                                  Get.toNamed('PlanTripPage');
+                                } else {
+                                  Get.snackbar(
+                                    'Error',
+                                    'Invalid credentials',
+                                    backgroundColor: Colors.redAccent,
+                                    colorText: Colors.white,
+                                  );
+                                }
                               },
 
                               style: ElevatedButton.styleFrom(

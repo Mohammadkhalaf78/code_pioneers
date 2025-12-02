@@ -69,6 +69,7 @@ import 'package:code_pioneers/pages/mycars.dart';
 import 'package:code_pioneers/pages/plan_trip_page.dart';
 import 'package:code_pioneers/pages/register_page.dart';
 import 'package:code_pioneers/pages/sign_in_page.dart';
+import 'package:code_pioneers/service/auth_service.dart';
 import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 
@@ -81,9 +82,9 @@ Future<void> main() async {
   // WidgetsFlutterBinding.ensureInitialized();
     
   await Supabase.initialize(
-    url: 'https://ithpaxznkhfkriitwusf.supabase.co',
+    url: 'https://dtikminqrwkhmwywbmyp.supabase.co',
     anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml0aHBheHpua2hma3JpaXR3dXNmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ1MjQ3MjEsImV4cCI6MjA4MDEwMDcyMX0.kCbZIGerDPZZcbkftqIGQOy4W6TGAXzWORQrHyPhZIE',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0aWttaW5xcndraG13eXdibXlwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0MzE5MDUsImV4cCI6MjA4MDAwNzkwNX0.oMHUY56FoA2J1ouX2BgNzKtIYZ4FFrLz4IpF3I77p_w',
   );
   runApp(const MyApp());
 }
@@ -96,7 +97,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: '/SignInPage',
+      initialRoute: AuthService().isLoggedIn()?'/PlanTripPage': '/SignInPage',
       getPages: [
         GetPage(
           name: '/PlanTripPage',
@@ -130,6 +131,7 @@ class MyApp extends StatelessWidget {
           page: () => MyCarPage(),
             binding: BindingsBuilder(() {
             Get.put(ControllerCarDetials());
+            Get.put(ControllerPlanTrip(),);
           }),
           
 

@@ -1,6 +1,7 @@
 import 'package:code_pioneers/Constants/colors.dart';
 import 'package:code_pioneers/car.dart';
 import 'package:code_pioneers/coordiantes.dart';
+import 'package:code_pioneers/service/car_service.dart';
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -371,7 +372,6 @@ class ControllerPlanTrip extends GetxController {
                   await computeYourPath();
 
                   Get.toNamed('BestRoutePage');
-
                 },
 
                 child: Text(' مسارك'),
@@ -399,5 +399,9 @@ class ControllerPlanTrip extends GetxController {
       }
       return "$hours ساعة و $mins د";
     }
+  }
+
+  showCars() {
+    CarService().loadCars();
   }
 }

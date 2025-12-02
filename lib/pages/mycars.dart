@@ -1,13 +1,29 @@
 import 'package:code_pioneers/Constants/colors.dart';
 import 'package:code_pioneers/view_model/controller_car_detials.dart';
+import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 
-class MyCarsPage extends StatelessWidget {
+class MyCarsPage extends StatefulWidget {
   MyCarsPage({super.key});
+
+  @override
+  State<MyCarsPage> createState() => _MyCarsPageState();
+}
+
+class _MyCarsPageState extends State<MyCarsPage> {
   final colors = ColorsConst();
+
   final controller = Get.put(ControllerCarDetials());
+  final controllerPlanTrip = Get.put(ControllerPlanTrip());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    controllerPlanTrip.showCars();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +119,7 @@ class MyCarsPage extends StatelessWidget {
                     ),
                   ),
                 ),
+            
 
                 Positioned.fill(
                   top: 140,
@@ -279,7 +296,7 @@ class MyCarsPage extends StatelessWidget {
 
                               // الضغط على العنصر كله
                               onTap: () {
-                                Get.toNamed('PlanTripPage',arguments:item  );
+                                Get.toNamed('PlanTripPage', arguments: item);
                               },
                             ),
                           ),
