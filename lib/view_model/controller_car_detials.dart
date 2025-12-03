@@ -1,4 +1,6 @@
-import 'package:code_pioneers/car.dart';
+import 'package:code_pioneers/main.dart';
+import 'package:code_pioneers/service/car_service.dart';
+import 'package:code_pioneers/service/car_service_class.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,34 +16,31 @@ class ControllerCarDetials extends GetxController {
   final carName = TextEditingController();
   final yearController = TextEditingController();
   final mileageController = TextEditingController();
-  final car = <Car>[].obs;
+  final car = <CarServiceClass>[].obs;
 
   double oilPriceKm = 0;
   double gasolineCost = 0;
   // تكلفة البنزين
 
   // ---------------------------------------------------------
-  double fuelConsumption() {
+  double fuelConsumption(CarServiceClass car) {
     double liter;
 
-    int cc = int.tryParse(ccController.text) ?? 1600;
-    int cylinders = int.tryParse(this.cylinders.text) ?? 4;
     double literPrice = double.tryParse(this.literPrice.text) ?? 19.0;
 
-
-    if (cc <= 1200) {
+    if (car.cc <= 1200) {
       liter = 5.5;
-    } else if (cc <= 1600) {
+    } else if (car.cc <= 1600) {
       liter = 6.5;
-    } else if (cc <= 2000) {
+    } else if (car.cc <= 2000) {
       liter = 7.5;
-    } else if (cc <= 3000) {
+    } else if (car.cc <= 3000) {
       liter = 9.0;
     } else {
       liter = 11.0;
     }
 
-    double modifier = 1 + ((cylinders - 4) * 0.15);
+    double modifier = 1 + ((car.cylinders - 4) * 0.15);
     gasolineCost = liter * modifier * literPrice / 100;
 
     return gasolineCost;
@@ -62,8 +61,8 @@ class ControllerCarDetials extends GetxController {
   }
 
   //  ---------------------------------------------------------
-  calculate() {
-    double totalCostPerKm = fuelConsumption() + maintanaceCost();
+  calculate(CarServiceClass car) {
+    double totalCostPerKm = fuelConsumption(car) + maintanaceCost();
     return totalCostPerKm;
   }
 
@@ -72,7 +71,130 @@ class ControllerCarDetials extends GetxController {
     double time = km / 60;
     return time;
   }
+
   // ---------------------------------------------------------
+  aploadCarData() async {
+    // تحقق من الحقول الفارغة (لو أي حقل مطلوب فاضي)
+    if (carName.text.isEmpty ||
+        yearController.text.isEmpty ||
+        ccController.text.isEmpty ||
+        cylinders.text.isEmpty ||
+        mileageController.text.isEmpty ||
+        literPrice.text.isEmpty) {
+      Get.snackbar(
+        'خطأ',
+        'الرجاء ملء جميع الحقول المطلوبة.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    // تحقق من صيغ الأرقام
+    final parsedYear = int.tryParse(yearController.text);
+    final parsedCc = int.tryParse(ccController.text);
+    final parsedCylinders = int.tryParse(cylinders.text);
+    final parsedMileage = int.tryParse(mileageController.text);
+    final parsedLiterPrice = int.tryParse(literPrice.text);
+
+    if (parsedYear == null) {
+      Get.snackbar(
+        'خطأ',
+        'سنة الصنع غير صحيحة (ادخل رقم صحيح).',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+    if (parsedCc == null || parsedCc <= 0) {
+      Get.snackbar(
+        'خطأ',
+        'سعة المحرك (cc) يجب أن تكون رقماً موجباً.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+    if (parsedCylinders == null || parsedCylinders <= 0) {
+      Get.snackbar(
+        'خطأ',
+        'عدد الأسطوانات يجب أن يكون رقماً موجباً.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+    if (parsedMileage == null || parsedMileage < 0) {
+      Get.snackbar(
+        'خطأ',
+        'عداد المسافة (mileage) غير صحيح.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+    if (parsedLiterPrice == null || parsedLiterPrice <= 0) {
+      Get.snackbar(
+        'خطأ',
+        'سعر اللتر يجب أن يكون رقماً موجباً.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    // تحقق من نطاق منطقي للسنة (مثال: من 1886 - أول سيارة مُسجلة - حتى السنة الحالية)
+    final currentYear = DateTime.now().year;
+    if (parsedYear < 1886 || parsedYear > currentYear + 1) {
+      Get.snackbar(
+        'خطأ',
+        'السنة غير منطقية. أدخل سنة بين 1886 و $currentYear.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      return;
+    }
+
+    // (اختياري) تحقق معقولية عدد الأسطوانات والقيم الأخرى
+    if (parsedCylinders > 16) {
+      Get.snackbar(
+        'تحذير',
+        'عدد الأسطوانات كبير غير متوقع، تأكد من القيمة.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      // لا نرجع هنا؛ مجرد تحذير — إن أردت تُرجع بدلًا من الاستمرار.
+    }
+
+    // بناء الكائن (كما في كودك الأصلي)
+    final m = CarServiceClass(
+      carName: carName.text,
+      cc: parsedCc,
+      cylinders: parsedCylinders,
+      carOdometer: parsedMileage,
+      year: parsedYear,
+      literPrice: parsedLiterPrice,
+    );
+
+    // حاول الرفع وتعامل مع الأخطاء، لكن لا تغيّر سطر الرفع نفسه
+    try {
+      await cloud.from('Cars').insert(m); // لا تُغير هذا السطر (Supabase)
+      Get.snackbar(
+        'نجح',
+        'تم الرفع بنجاح',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+
+      // مسح الحقول والعودة
+      carName.clear();
+      yearController.clear();
+      ccController.clear();
+      cylinders.clear();
+      mileageController.clear();
+      literPrice.clear();
+      Get.back();
+    } catch (e) {
+      // معالجة أي خطأ (شبكة، صلاحيات، ... )
+      Get.snackbar(
+        'فشل الرفع',
+        'حدث خطأ أثناء رفع البيانات. تأكد من الاتصال أو الصلاحيات.\nالخطأ: ${e.toString()}',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+      // هنا لا نغلق الصفحة ولا نمسح الحقول لكي يتمكن المستخدم من المحاولة مجددًا
+    }
+  }
 
   void showdDateildialog(BuildContext context) {
     showDialog(
@@ -302,6 +424,7 @@ class ControllerCarDetials extends GetxController {
                           const SizedBox(width: 12),
                           Expanded(
                             child: ElevatedButton(
+<<<<<<< HEAD
                               onPressed: () {
                                 if (carName.text.isEmpty &
                                     yearController.text.isEmpty &
@@ -334,6 +457,10 @@ class ControllerCarDetials extends GetxController {
                                 cylinders.clear();
                                 mileageController.clear();
                                 Get.back();
+=======
+                              onPressed: () async {
+                                aploadCarData();
+>>>>>>> 02cc6fccd47310e8fccdcc4fc548755aa2dcf209
                               },
                               style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
@@ -363,7 +490,9 @@ class ControllerCarDetials extends GetxController {
       },
     );
   }
+
+  showCars() async {
+    final resulet = await CarService().loadCars();
+    car.value = resulet;
+  }
 }
-
-
-

@@ -1,5 +1,5 @@
-import 'package:code_pioneers/car.dart';
 import 'package:code_pioneers/service/auth_service.dart';
+import 'package:code_pioneers/service/car_service_class.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,10 +8,10 @@ class PlanTripPage extends StatelessWidget {
   PlanTripPage({super.key});
   final authService = AuthService();
 
-  final Car car =
+  final CarServiceClass car =
       Get.arguments ??
       Car(
-        carName: 'default'.tr,
+        carName: 'افتراضي',
         year: 2000,
         cc: 1600,
         cylinders: 4,
@@ -556,6 +556,7 @@ class PlanTripPage extends StatelessWidget {
                   // Create best route button - التعديل هنا
                   ElevatedButton.icon(
                     onPressed: () async {
+                      
                       controller.showSimDialog(context, car);
                     },
                     icon: const Icon(Icons.alt_route, color: Colors.white),

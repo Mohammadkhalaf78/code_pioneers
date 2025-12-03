@@ -1,4 +1,4 @@
-import 'package:code_pioneers/car.dart';
+import 'package:code_pioneers/service/car_service_class.dart';
 import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,7 +8,7 @@ class MyCarPage extends StatelessWidget {
 
   final controller = Get.put(ControllerCarDetials());
 
-  final Car car = Get.arguments as Car;
+  final CarServiceClass car = Get.arguments as CarServiceClass;
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -165,7 +165,7 @@ class MyCarPage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "${(controller.fuelConsumption()*10).toStringAsFixed(1)}",
+                                    "${(controller.fuelConsumption(car )*10).toStringAsFixed(1)}",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
@@ -235,7 +235,7 @@ class MyCarPage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "${(controller.calculate()*100).toStringAsFixed(1)}",
+                                    "${(controller.calculate( car  )*100).toStringAsFixed(1)}",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,

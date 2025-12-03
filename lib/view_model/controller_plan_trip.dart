@@ -1,7 +1,6 @@
 import 'package:code_pioneers/Constants/colors.dart';
-import 'package:code_pioneers/car.dart';
 import 'package:code_pioneers/coordiantes.dart';
-import 'package:code_pioneers/service/car_service.dart';
+import 'package:code_pioneers/service/car_service_class.dart';
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -322,7 +321,7 @@ class ControllerPlanTrip extends GetxController {
     return coords;
   }
 
-  void showSimDialog(BuildContext context, Car car) {
+  void showSimDialog(BuildContext context, CarServiceClass car) {
     showDialog(
       context: context,
       builder: (context) => SimpleDialog(
@@ -353,7 +352,7 @@ class ControllerPlanTrip extends GetxController {
                   Get.snackbar('نجاح', 'تم إنشاء أفضل مسار بناءً على مدخلاتك');
 
                   // الانتقال لصفحة أفضل مسار
-                  Get.toNamed('BestRoutePage');
+                  Get.toNamed('BestRoutePage', arguments: car);
                 },
                 child: Text('افضل مسار', style: TextStyle(color: Colors.white)),
               ),
@@ -371,7 +370,7 @@ class ControllerPlanTrip extends GetxController {
 
                   await computeYourPath();
 
-                  Get.toNamed('BestRoutePage');
+                  Get.toNamed('BestRoutePage', arguments: car);
                 },
 
                 child: Text(' مسارك'),
@@ -401,7 +400,5 @@ class ControllerPlanTrip extends GetxController {
     }
   }
 
-  showCars() {
-    CarService().loadCars();
-  }
+
 }

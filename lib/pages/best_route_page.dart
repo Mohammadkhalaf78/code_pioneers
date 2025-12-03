@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:code_pioneers/service/car_service_class.dart';
 import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,8 @@ class BestRoutePage extends StatelessWidget {
 
   final controller = Get.find<ControllerPlanTrip>();
   final controllerCar = Get.find<ControllerCarDetials>();
+
+  final CarServiceClass car = Get.arguments as CarServiceClass;
 
   double rounded = 0;
 
@@ -69,6 +72,7 @@ class BestRoutePage extends StatelessWidget {
                         ),
                         CircleAvatar(
                           radius: 20,
+                          // ignore: deprecated_member_use
                           backgroundColor: Colors.blue.withOpacity(0.2),
                           child: IconButton(
                             onPressed: () {
@@ -251,6 +255,7 @@ class BestRoutePage extends StatelessWidget {
                               child: Container(
                                 padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
+                                  // ignore: deprecated_member_use
                                   color: Colors.white.withOpacity(0.25),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
@@ -266,6 +271,7 @@ class BestRoutePage extends StatelessWidget {
                                           width: 50,
                                           height: 50,
                                           decoration: BoxDecoration(
+                                            // ignore: deprecated_member_use
                                             color: Colors.white.withOpacity(
                                               0.25,
                                             ),
@@ -283,7 +289,7 @@ class BestRoutePage extends StatelessWidget {
 
                                     Obx(
                                       () => Text(
-                                        '${controller.totalKm.toStringAsFixed(1)}',
+                                        controller.totalKm.toStringAsFixed(1),
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -344,7 +350,7 @@ class BestRoutePage extends StatelessWidget {
                                     const SizedBox(height: 5),
                                     Obx(
                                       () => Text(
-                                        '${(controller.totalKm.value * controllerCar.calculate()).toStringAsFixed(1)}',
+                                        '${(controller.totalKm.value * controllerCar.calculate(car)).toStringAsFixed(1)}',
                                         style: const TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
@@ -535,7 +541,7 @@ class BestRoutePage extends StatelessWidget {
 
                         // احسب التكلفة )
                         final double itemCost =
-                            rounded * controllerCar.calculate();
+                            rounded * controllerCar.calculate(car);
 
                         final String kmText = distanceKm > 0
                             ? rounded.toStringAsFixed(1)

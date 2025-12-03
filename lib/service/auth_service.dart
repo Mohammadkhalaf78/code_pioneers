@@ -15,9 +15,8 @@ class AuthService {
     try {
       await cloud.auth.signInWithPassword(password: password, email: email);
       return true;
-    } on Exception catch (e) {
+    } on Exception {
       return false;
-      // TODO
     }
   }
 
@@ -26,7 +25,6 @@ class AuthService {
       await cloud.auth.signOut();
       return true;
     } catch (e) {
-      print(e);
       return false;
     }
   }
