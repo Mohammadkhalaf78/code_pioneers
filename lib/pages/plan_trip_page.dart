@@ -560,6 +560,7 @@ class PlanTripPage extends StatelessWidget {
                   // Create best route button - التعديل هنا
                   ElevatedButton.icon(
                     onPressed: () async {
+                      
                       controller.showSimDialog(context, car);
                     },
                     icon: const Icon(Icons.alt_route, color: Colors.white),

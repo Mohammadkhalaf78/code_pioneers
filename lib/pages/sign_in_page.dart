@@ -1,4 +1,3 @@
-import 'package:code_pioneers/pages/plan_trip_page.dart';
 import 'package:code_pioneers/pages/register_page.dart';
 import 'package:code_pioneers/service/auth_service.dart';
 import 'package:flutter/material.dart';

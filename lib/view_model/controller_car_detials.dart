@@ -21,27 +21,25 @@ class ControllerCarDetials extends GetxController {
   // تكلفة البنزين
 
   // ---------------------------------------------------------
-  double fuelConsumption() {
+  double fuelConsumption(Car car) {
     double liter;
 
-    int cc = int.tryParse(ccController.text) ?? 1600;
-    int cylinders = int.tryParse(this.cylinders.text) ?? 4;
     double literPrice = double.tryParse(this.literPrice.text) ?? 19.0;
 
 
-    if (cc <= 1200) {
+    if (car.cc <= 1200) {
       liter = 5.5;
-    } else if (cc <= 1600) {
+    } else if (car.cc <= 1600) {
       liter = 6.5;
-    } else if (cc <= 2000) {
+    } else if (car.cc <= 2000) {
       liter = 7.5;
-    } else if (cc <= 3000) {
+    } else if (car.cc <= 3000) {
       liter = 9.0;
     } else {
       liter = 11.0;
     }
 
-    double modifier = 1 + ((cylinders - 4) * 0.15);
+    double modifier = 1 + ((car.cylinders - 4) * 0.15);
     gasolineCost = liter * modifier * literPrice / 100;
 
     return gasolineCost;
@@ -62,8 +60,8 @@ class ControllerCarDetials extends GetxController {
   }
 
   //  ---------------------------------------------------------
-  calculate() {
-    double totalCostPerKm = fuelConsumption() + maintanaceCost();
+  calculate(Car car) {
+    double totalCostPerKm = fuelConsumption( car ) + maintanaceCost();
     return totalCostPerKm;
   }
 

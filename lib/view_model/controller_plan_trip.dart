@@ -353,7 +353,7 @@ class ControllerPlanTrip extends GetxController {
                   Get.snackbar('نجاح', 'تم إنشاء أفضل مسار بناءً على مدخلاتك');
 
                   // الانتقال لصفحة أفضل مسار
-                  Get.toNamed('BestRoutePage');
+                  Get.toNamed('BestRoutePage',arguments:  car);
                 },
                 child: Text('افضل مسار', style: TextStyle(color: Colors.white)),
               ),
@@ -371,7 +371,7 @@ class ControllerPlanTrip extends GetxController {
 
                   await computeYourPath();
 
-                  Get.toNamed('BestRoutePage');
+                  Get.toNamed('BestRoutePage',arguments: car);
                 },
 
                 child: Text(' مسارك'),

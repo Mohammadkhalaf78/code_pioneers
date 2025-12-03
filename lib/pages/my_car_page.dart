@@ -165,7 +165,7 @@ class MyCarPage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "${(controller.fuelConsumption()*10).toStringAsFixed(1)}",
+                                    "${(controller.fuelConsumption(car )*10).toStringAsFixed(1)}",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
@@ -235,7 +235,7 @@ class MyCarPage extends StatelessWidget {
                                   ),
                                   SizedBox(height: 8),
                                   Text(
-                                    "${(controller.calculate()*100).toStringAsFixed(1)}",
+                                    "${(controller.calculate( car  )*100).toStringAsFixed(1)}",
                                     style: TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w700,
