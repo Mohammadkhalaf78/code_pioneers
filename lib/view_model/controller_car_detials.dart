@@ -142,7 +142,7 @@ class ControllerCarDetials extends GetxController {
                           Expanded(
                             child: Center(
                               child: Text(
-                                'إضافة سيارة جديدة',
+                                'add_new_car_button'.tr,
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16,
@@ -170,8 +170,7 @@ class ControllerCarDetials extends GetxController {
                       TextField(
                         controller: carName,
                         decoration: InputDecoration(
-                          hintText: 'مثال: كامري',
-                          labelText: 'اسم السيارة',
+                          labelText: 'car_name_label'.tr,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -191,8 +190,7 @@ class ControllerCarDetials extends GetxController {
                               keyboardType: TextInputType.number,
                               controller: yearController,
                               decoration: InputDecoration(
-                                labelText: 'السنة',
-                                hintText: '2025',
+                                labelText: 'car_year_label'.tr,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -209,8 +207,7 @@ class ControllerCarDetials extends GetxController {
                               keyboardType: TextInputType.number,
                               controller: ccController,
                               decoration: InputDecoration(
-                                labelText: 'سعة المحرك (ccController)',
-                                hintText: '0',
+                                labelText: 'engine_capacity_label'.tr,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -234,8 +231,7 @@ class ControllerCarDetials extends GetxController {
                               keyboardType: TextInputType.number,
                               controller: cylinders,
                               decoration: InputDecoration(
-                                labelText: 'cylinders ',
-                                hintText: '1600',
+                                labelText: 'cylinders_label'.tr,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -252,8 +248,7 @@ class ControllerCarDetials extends GetxController {
                               keyboardType: TextInputType.number,
                               controller: literPrice,
                               decoration: InputDecoration(
-                                labelText: 'literPrice',
-                                hintText: '19',
+                                labelText: 'liter_price_label'.tr,
                                 border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
@@ -274,8 +269,7 @@ class ControllerCarDetials extends GetxController {
                         keyboardType: TextInputType.number,
                         controller: mileageController,
                         decoration: InputDecoration(
-                          labelText: 'عداد المسافات الحالي (كم)',
-                          hintText: '0',
+                          labelText: 'current_mileage_label'.tr,
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
@@ -294,7 +288,7 @@ class ControllerCarDetials extends GetxController {
                           Expanded(
                             child: OutlinedButton(
                               onPressed: () => Navigator.of(context).pop(),
-                              child: const Text('إلغاء'),
+                              child: Text('cancel'.tr),
                               style: OutlinedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 14,
@@ -315,9 +309,9 @@ class ControllerCarDetials extends GetxController {
                                     cylinders.text.isEmpty) {
                                   // يمكنك إضافة رسالة خطأ هنا إذا أردت
                                   Get.snackbar(
-                                    'خطأ',
-                                    'الرجاء ملء جميع الحقول المطلوبة',
-                                    snackPosition: SnackPosition.BOTTOM,
+                                    'error'.tr,
+                                    'fill_all_fields'.tr,
+                                    snackPosition: SnackPosition.TOP,
                                   );
                                   return;
                                 }
@@ -350,15 +344,14 @@ class ControllerCarDetials extends GetxController {
                                 ),
                                 backgroundColor: Colors.blue,
                               ),
-                              child: const Text(
-                                'إضافة',
+                              child: Text(
+                                'add'.tr,
                                 style: TextStyle(color: Colors.white),
                               ),
                             ),
                           ),
                         ],
                       ),
-
                       const SizedBox(height: 8),
                     ],
                   ),

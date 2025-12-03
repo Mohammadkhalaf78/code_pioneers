@@ -20,6 +20,18 @@ class SignInPage extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
+                TextButton(
+      onPressed: () {
+        Get.updateLocale(Locale('en'));   // ← يقلب إنجليزي
+      },
+      child: Text("English"),
+    ),
+    TextButton(
+      onPressed: () {
+        Get.updateLocale(Locale('ar'));   // ← يرجع عربي
+      },
+      child: Text("العربية"),
+    ),
                 Container(
                   width: 80,
                   height: 80,
@@ -37,12 +49,12 @@ class SignInPage extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'تسجيل الدخول',
+                  "login".tr,
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
                 Text(
-                  'أهلاً بعودتك',
+                  'welcome Back'.tr,
                   style: TextStyle(
                     fontSize: 14,
                     color: const Color.fromARGB(255, 83, 82, 82),
@@ -65,10 +77,10 @@ class SignInPage extends StatelessWidget {
                     ],
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'البريد الإلكتروني',
+                        'email'.tr,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -82,9 +94,8 @@ class SignInPage extends StatelessWidget {
                         ),
                         child: TextField(
                           controller: emailController,
-                          textAlign: TextAlign.right,
                           decoration: InputDecoration(
-                            hintText: 'example@gmail.com',
+                            hintText: 'enter email address'.tr,
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(
@@ -110,7 +121,7 @@ class SignInPage extends StatelessWidget {
                       ),
                       SizedBox(height: 25),
                       Text(
-                        'كلمة المرور',
+                        'password'.tr,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -118,44 +129,37 @@ class SignInPage extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF5F7FA),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: TextField(
-                          controller: passwordController,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'أدخل كلمة المرور',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 14,
-                              horizontal: 6,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: const Color.fromARGB(255, 249, 245, 245),
-                                width: 0.5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: Colors.orange,
-                                width: 1.5,
-                              ),
-                            ),
-                            prefixIcon: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.visibility, color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                      ),
+  decoration: BoxDecoration(
+    color: Color(0xFFF5F7FA),
+    borderRadius: BorderRadius.circular(15),
+    border: Border.all(color: Color.fromARGB(255, 249, 245, 245), width: 0.5),
+  ),
+  padding: EdgeInsets.symmetric(horizontal: 16),
+  child: Row(
+    children: [
+      Expanded(
+        child: TextField(
+          controller: passwordController,
+          obscureText: true,
+          decoration: InputDecoration(
+            hintText: 'enter password'.tr,
+            hintStyle: TextStyle(color: Colors.grey),
+            border: InputBorder.none,
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 14),
+          ),
+        ),
+      ),
+      IconButton(
+        onPressed: () {
+        },
+        icon: Icon(Icons.visibility, color: Colors.grey),
+      ),
+    ],
+  ),
+),
                       SizedBox(height: 25),
-
+    
                       SizedBox(height: 30),
                       SizedBox(
                         width: double.infinity,
@@ -187,17 +191,10 @@ class SignInPage extends StatelessWidget {
                                   emailController.text,
                                   passwordController.text,
                                 );
-                                Get.snackbar(
-                                  'result',
-                                  result ? 'succesfully' : 'failed',
-                                );
-
                                 if (result == true) {
                                   Get.snackbar(
                                     'Success',
                                     'Logged in successfully!',
-                                    backgroundColor: const Color(0xFF67C090),
-                                    colorText: Colors.white,
                                   );
                                   Get.toNamed('PlanTripPage');
                                 } else {
@@ -209,7 +206,6 @@ class SignInPage extends StatelessWidget {
                                   );
                                 }
                               },
-
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.orange,
                                 padding: EdgeInsets.symmetric(vertical: 18),
@@ -219,7 +215,7 @@ class SignInPage extends StatelessWidget {
                                 elevation: 0,
                               ),
                               child: Text(
-                                'دخول',
+                                'loginButton'.tr,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -231,7 +227,7 @@ class SignInPage extends StatelessWidget {
                       SizedBox(height: 40),
                       Center(
                         child: Text(
-                          'ليس لديك حساب؟',
+                          'no account'.tr,
                           style: TextStyle(color: Colors.grey, fontSize: 15),
                           textAlign: TextAlign.center,
                         ),
@@ -243,7 +239,7 @@ class SignInPage extends StatelessWidget {
                             Get.to(RegisterPage());
                           },
                           child: Text(
-                            'إنشاء حساب جديد',
+                            'create Account'.tr,
                             style: TextStyle(
                               color: Colors.blue,
                               fontSize: 16,
@@ -255,7 +251,7 @@ class SignInPage extends StatelessWidget {
                     ],
                   ),
                 ),
-                Text('باستخدام التطبيق، أنت توافق على الشروط والأحكام'),
+                Text('using_the_app_means_you_agree'.tr)
               ],
             ),
           ),

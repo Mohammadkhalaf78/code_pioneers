@@ -59,10 +59,10 @@ class _MyCarsPageState extends State<MyCarsPage> {
                         GestureDetector(
                           onTap: () => Get.toNamed("/PlanTripPage"),
                           child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.start,
                             children: [
                               Text(
-                                'رجوع',
+                                'back'.tr,
                                 style: TextStyle(color: Colors.white),
                               ),
                               SizedBox(width: 5),
@@ -75,31 +75,6 @@ class _MyCarsPageState extends State<MyCarsPage> {
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: const [
-                                  SizedBox(width: 6),
-                                  Text(
-                                    ' سيارتي',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    '1 سيارة ',
-                                    style: TextStyle(
-                                      color: Colors.white70,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const SizedBox(width: 12),
                             Container(
                               width: 56,
                               height: 56,
@@ -113,14 +88,37 @@ class _MyCarsPageState extends State<MyCarsPage> {
                                 size: 28,
                               ),
                             ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(width: 6),
+                                  Text(
+                                    'my_car'.tr,
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(
+                                    'one_car'.tr,
+                                    style: TextStyle(
+                                      color: Colors.white70,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ],
                     ),
                   ),
                 ),
-            
-
                 Positioned.fill(
                   top: 140,
                   child: InkWell(
@@ -142,10 +140,9 @@ class _MyCarsPageState extends State<MyCarsPage> {
 
                         children: [
                           Text(
-                            'اضافة سيارة جديدة ',
+                            'add_new_car'.tr,
                             style: TextStyle(color: Colors.white),
                           ),
-
                           Icon(Icons.add, color: Colors.white),
                         ],
                       ),
@@ -159,7 +156,7 @@ class _MyCarsPageState extends State<MyCarsPage> {
                   ? Padding(
                       padding: const EdgeInsets.only(top: 80.0),
                       child: Column(
-                        children: const [
+                        children:[
                           Icon(
                             Icons.directions_car,
                             size: 80,
@@ -167,7 +164,7 @@ class _MyCarsPageState extends State<MyCarsPage> {
                           ),
                           SizedBox(height: 16),
                           Text(
-                            'لم تقم بإضافة أي سيارة بعد',
+                            'no_cars_added'.tr,
                             style: TextStyle(fontSize: 16, color: Colors.grey),
                           ),
                         ],
@@ -205,7 +202,6 @@ class _MyCarsPageState extends State<MyCarsPage> {
                                   255,
                                   255,
                                 ),
-
                                 onPressed: (context) {
                                   controller.car.removeAt(index);
                                 },
@@ -250,7 +246,7 @@ class _MyCarsPageState extends State<MyCarsPage> {
                               ),
 
                               subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 4),
                                   Text(
@@ -259,11 +255,10 @@ class _MyCarsPageState extends State<MyCarsPage> {
                                       color: Colors.black54,
                                       fontSize: 12,
                                     ),
-                                    textAlign: TextAlign.right,
                                   ),
                                   const SizedBox(height: 7),
                                   Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Text(
                                         'clinder:${controller.car[index].cylinders}',

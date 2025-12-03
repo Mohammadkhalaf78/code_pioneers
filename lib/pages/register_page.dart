@@ -21,6 +21,18 @@ class RegisterPage extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
+      //            TextButton(
+      //   onPressed: () {
+      //     Get.updateLocale(Locale('en'));   // ← يقلب إنجليزي
+      //   },
+      //   child: Text("English"),
+      // ),
+      // TextButton(
+      //   onPressed: () {
+      //     Get.updateLocale(Locale('ar'));   // ← يرجع عربي
+      //   },
+      //   child: Text("العربية"),
+      // ),
                 Container(
                   width: 80,
                   height: 80,
@@ -38,12 +50,12 @@ class RegisterPage extends StatelessWidget {
                 ),
                 SizedBox(height: 16),
                 Text(
-                  'إنشاء حساب',
+                  'create_account'.tr,
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 4),
                 Text(
-                  'انضم إلينا اليوم',
+                  'join_us_today'.tr,
                   style: TextStyle(
                     fontSize: 14,
                     color: const Color.fromARGB(255, 83, 82, 82),
@@ -66,10 +78,10 @@ class RegisterPage extends StatelessWidget {
                     ],
                   ),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'الإسم الكامل',
+                        'full_name'.tr,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -82,9 +94,9 @@ class RegisterPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(15),
                         ),
                         child: TextField(
-                          textAlign: TextAlign.right,
+                          // obscureText: true,
                           decoration: InputDecoration(
-                            hintText: 'أدخل اسمك الكامل',
+                            hintText: 'enter_full_name'.tr,
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(
@@ -110,7 +122,7 @@ class RegisterPage extends StatelessWidget {
                       ),
                       SizedBox(height: 25),
                       Text(
-                        'البريد الإلكتروني',
+                        'email'.tr,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -124,9 +136,8 @@ class RegisterPage extends StatelessWidget {
                         ),
                         child: TextField(
                           controller: emailController,
-                          textAlign: TextAlign.right,
                           decoration: InputDecoration(
-                            hintText: 'example@gmail.com',
+                            hintText: 'enter_email_address'.tr,
                             hintStyle: TextStyle(color: Colors.grey),
                             border: InputBorder.none,
                             contentPadding: EdgeInsets.symmetric(
@@ -152,7 +163,7 @@ class RegisterPage extends StatelessWidget {
                       ),
                       SizedBox(height: 25),
                       Text(
-                        'كلمة المرور',
+                        'password'.tr,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -160,46 +171,38 @@ class RegisterPage extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF5F7FA),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: TextField(
-                          controller: passwordController,
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText:
-                                'أدخل كلمة مرور قوية ( 8 أحرف علي الأقل )',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 14,
-                              horizontal: 6,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: const Color.fromARGB(255, 249, 245, 245),
-                                width: 0.5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: Colors.orange,
-                                width: 1.5,
-                              ),
-                            ),
-                            prefixIcon: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.visibility, color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                      ),
+  decoration: BoxDecoration(
+    color: Color(0xFFF5F7FA),
+    borderRadius: BorderRadius.circular(15),
+    border: Border.all(color: Color.fromARGB(255, 249, 245, 245), width: 0.5),
+  ),
+  padding: EdgeInsets.symmetric(horizontal: 16),
+  child: Row(
+    children: [
+      Expanded(
+        child: TextField(
+          controller: passwordController,
+          obscureText: true,
+          decoration: InputDecoration(
+            hintText: 'enter_strong_password'.tr,
+            hintStyle: TextStyle(color: Colors.grey),
+            border: InputBorder.none,
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 14),
+          ),
+        ),
+      ),
+      IconButton(
+        onPressed: () {
+        },
+        icon: Icon(Icons.visibility, color: Colors.grey),
+      ),
+    ],
+  ),
+),
                       SizedBox(height: 25),
                       Text(
-                        'تأكيد كلمة المرور',
+                        'confirm_password'.tr,
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
@@ -207,41 +210,35 @@ class RegisterPage extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xFFF5F7FA),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                        child: TextField(
-                          textAlign: TextAlign.right,
-                          decoration: InputDecoration(
-                            hintText: 'أعد إدخال كلمة المرور',
-                            hintStyle: TextStyle(color: Colors.grey),
-                            border: InputBorder.none,
-                            contentPadding: EdgeInsets.symmetric(
-                              vertical: 14,
-                              horizontal: 10,
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: const Color.fromARGB(255, 249, 245, 245),
-                                width: 0.5,
-                              ),
-                            ),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(20),
-                              borderSide: BorderSide(
-                                color: Colors.orange,
-                                width: 1.5,
-                              ),
-                            ),
-                            prefixIcon: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.visibility, color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                      ),
+  decoration: BoxDecoration(
+    color: Color(0xFFF5F7FA),
+    borderRadius: BorderRadius.circular(15),
+    border: Border.all(color: Color.fromARGB(255, 249, 245, 245), width: 0.5),
+  ),
+  padding: EdgeInsets.symmetric(horizontal: 16),
+  child: Row(
+    children: [
+      Expanded(
+        child: TextField(
+          controller: passwordController,
+          obscureText: true,
+          decoration: InputDecoration(
+            hintText: 'confirm_password'.tr,
+            hintStyle: TextStyle(color: Colors.grey),
+            border: InputBorder.none,
+            isDense: true,
+            contentPadding: EdgeInsets.symmetric(vertical: 14),
+          ),
+        ),
+      ),
+      IconButton(
+        onPressed: () {
+        },
+        icon: Icon(Icons.visibility, color: Colors.grey),
+      ),
+    ],
+  ),
+),
                       SizedBox(height: 30),
                       SizedBox(
                         width: double.infinity,
@@ -275,7 +272,7 @@ class RegisterPage extends StatelessWidget {
                                   emailController.text.trim(),
                                   passwordController.text.trim(),
                                 );
-
+    
                                 if (result) {
                                   Get.snackbar(
                                     'Register',
@@ -301,7 +298,7 @@ class RegisterPage extends StatelessWidget {
                                 elevation: 0,
                               ),
                               child: Text(
-                                'إنشاء حساب',
+                                'create_account'.tr,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 18,
@@ -313,7 +310,7 @@ class RegisterPage extends StatelessWidget {
                       SizedBox(height: 40),
                       Center(
                         child: Text(
-                          'لديك حساب بالفعل؟',
+                          'already_have_account'.tr,
                           style: TextStyle(color: Colors.grey, fontSize: 15),
                           textAlign: TextAlign.center,
                         ),
@@ -325,7 +322,7 @@ class RegisterPage extends StatelessWidget {
                             Get.to(SignInPage());
                           },
                           child: Text(
-                            'تسجيل الدخول',
+                            'login'.tr,
                             style: TextStyle(
                               color: Colors.blue,
                               fontSize: 16,
@@ -338,7 +335,7 @@ class RegisterPage extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'بإنشاء حساب، أنت توافق على الشروط والأحكام و سياسة الخصوصية',
+                  'by_creating_account_you_agree'.tr,
                 ),
               ],
             ),

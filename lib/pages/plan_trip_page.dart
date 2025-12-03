@@ -11,7 +11,7 @@ class PlanTripPage extends StatelessWidget {
   final Car car =
       Get.arguments ??
       Car(
-        carName: 'افتراضي',
+        carName: 'default'.tr,
         year: 2000,
         cc: 1600,
         cylinders: 4,
@@ -60,9 +60,9 @@ class PlanTripPage extends StatelessWidget {
                           onPressed: () {
                             authService.logout();
                             Get.snackbar(
-                              'logout',
-                              'تم تسجيل الخروج بنجاح',
-                              snackPosition: SnackPosition.BOTTOM,
+                              'logout'.tr,
+                              'logout_success'.tr,
+                              snackPosition: SnackPosition.TOP,
                               backgroundColor: Colors.green,
                               colorText: Colors.white,
                             );
@@ -72,12 +72,12 @@ class PlanTripPage extends StatelessWidget {
                         ),
                         Expanded(
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: const [
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               
                               SizedBox(width: 6),
                               Text(
-                                'خطط لرحلتك',
+                                'plan_your_trip'.tr,
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 22,
@@ -86,13 +86,12 @@ class PlanTripPage extends StatelessWidget {
                               ),
                               SizedBox(height: 4),
                               Text(
-                                'حدد نقطة البداية والوجهات',
+                                'select_start_and_destinations'.tr,
                                 style: TextStyle(
                                   color: Colors.white70,
                                   fontSize: 16,
                                 ),
                               ),
-                            
                             ],
                           ),
                         ),
@@ -110,12 +109,10 @@ class PlanTripPage extends StatelessWidget {
                             size: 28,
                           ),
                         ),
-                      
                       ],
                     ),
                   ),
                 ),
-
                 Positioned.fill(
                   top: 144,
                   child: GestureDetector(
@@ -138,14 +135,19 @@ class PlanTripPage extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          const Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.black54,
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundColor: Colors.blue.shade100,
+                            child: const Icon(
+                              Icons.directions_car,
+                              color: Colors.red,
+                              size: 25,
+                            ),
                           ),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   '${car.carName}',
@@ -166,14 +168,9 @@ class PlanTripPage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 12),
-                          CircleAvatar(
-                            radius: 18,
-                            backgroundColor: Colors.blue.shade100,
-                            child: const Icon(
-                              Icons.directions_car,
-                              color: Colors.red,
-                              size: 25,
-                            ),
+                          const Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Colors.black54,
                           ),
                         ],
                       ),
@@ -182,7 +179,6 @@ class PlanTripPage extends StatelessWidget {
                 ),
               ],
             ),
-
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -207,10 +203,10 @@ class PlanTripPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
                             Text(
-                              'نقطة البداية',
+                              'starting_point'.tr,
                               style: TextStyle(
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
@@ -233,6 +229,25 @@ class PlanTripPage extends StatelessWidget {
                           ),
                           child: Row(
                             children: [
+                               Icon(
+                                  Icons.place,
+                                  color: Colors.blue,
+                               ),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Obx(
+                                  () => TextField(
+                                    controller: controller
+                                        .startLocationController
+                                        .value,
+                                    decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'starting_point_hint'.tr,
+                                      // ),
+                                    ),
+                                  ),
+                                ),
+                              ),
                               Container(
                                 width: 40,
                                 height: 40,
@@ -250,30 +265,12 @@ class PlanTripPage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: 10),
-                              Expanded(
-                                child: Obx(
-                                  () => TextField(
-                                    controller: controller
-                                        .startLocationController
-                                        .value,
-                                    decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'أدخل موقع البداية...',
-                                      suffixIcon: Icon(
-                                        Icons.place,
-                                        color: Colors.blue,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),
                         const SizedBox(height: 8),
                         Row(
-                          children: const [
+                          children: [
                             Icon(
                               Icons.lightbulb,
                               size: 18,
@@ -282,7 +279,7 @@ class PlanTripPage extends StatelessWidget {
                             SizedBox(width: 6),
                             Expanded(
                               child: Text(
-                                'يمكنك استخدام موقعك الحالي كنقطة بداية',
+                                'use_current_location'.tr,
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: Colors.black54,
@@ -313,9 +310,9 @@ class PlanTripPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(
-                          children: const [
+                          children: [
                             Text(
-                              'أضف الوجهات',
+                              'add_destinations'.tr,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                             Spacer(),
@@ -325,79 +322,6 @@ class PlanTripPage extends StatelessWidget {
                         const SizedBox(height: 12),
                         Row(
                           children: [
-                            Obx(() {
-                              // نستخدم isFetchingAddress لمزامنة حالة التحميل
-                              final loading =
-                                  controller.isFetchingAddress.value;
-
-                              return ElevatedButton.icon(
-                                onPressed: loading
-                                    ? null
-                                    : () async {
-                                        // نقرأ النص أولاً
-                                        final text = controller
-                                            .controllerAddPlace
-                                            .text
-                                            .trim();
-
-                                        if (text.isEmpty) {
-                                          Get.snackbar(
-                                            'خطأ',
-                                            'يرجى إدخال اسم المكان',
-                                            snackPosition: SnackPosition.BOTTOM,
-                                            backgroundColor: Colors.redAccent,
-                                            colorText: Colors.white,
-                                          );
-                                          return;
-                                        }
-
-                                        // استدعاء الدالة المؤمنة
-                                        final added = await controller
-                                            .fetchCoordinates();
-
-                                        if (added) {
-                                          // فقط أضف للنصوص المعروضة إذا نجحنا في الحصول على إحداثيات
-                                          controller.addPlace.add(text);
-                                          controller.controllerAddPlace.clear();
-
-                                          // لو محتاج، تقدر تعيد حساب المسافات أو الـ total هنا
-                                          // await controller.computeAndStoreDistances(); // لو موجودة
-                                        }
-                                      },
-                                icon: loading
-                                    ? SizedBox(
-                                        width: 16,
-                                        height: 16,
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 2,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    : const Icon(
-                                        Icons.add,
-                                        color: Colors.white,
-                                      ),
-                                label: loading
-                                    ? const Text(
-                                        'جاري البحث...',
-                                        style: TextStyle(color: Colors.white),
-                                      )
-                                    : const Text(
-                                        'أضف',
-                                        style: TextStyle(color: Colors.white),
-                                      ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:
-                                      controller.color.primaryColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  elevation: 0,
-                                ),
-                              );
-                            }),
-
-                            const SizedBox(width: 12),
                             Expanded(
                               child: Container(
                                 height: 44,
@@ -416,7 +340,7 @@ class PlanTripPage extends StatelessWidget {
                                             controller.controllerAddPlace,
                                         decoration: InputDecoration(
                                           border: InputBorder.none,
-                                          hintText: 'بحث عن مكان',
+                                          hintText: 'search_hint'.tr,
                                         ),
                                       ),
                                     ),
@@ -425,6 +349,78 @@ class PlanTripPage extends StatelessWidget {
                                 ),
                               ),
                             ),
+                            const SizedBox(width: 12),
+                            Obx(() {
+                              // نستخدم isFetchingAddress لمزامنة حالة التحميل
+                              final loading =
+                                  controller.isFetchingAddress.value;
+    
+                              return ElevatedButton.icon(
+                                onPressed: loading
+                                    ? null
+                                    : () async {
+                                        // نقرأ النص أولاً
+                                        final text = controller
+                                            .controllerAddPlace
+                                            .text
+                                            .trim();
+    
+                                        if (text.isEmpty) {
+                                          Get.snackbar(
+                                            'error'.tr,
+                                            'error_enter_place_name'.tr,
+                                            snackPosition: SnackPosition.TOP,
+                                            backgroundColor: Colors.redAccent,
+                                            colorText: Colors.white,
+                                          );
+                                          return;
+                                        }
+    
+                                        // استدعاء الدالة المؤمنة
+                                        final added = await controller
+                                            .fetchCoordinates();
+    
+                                        if (added) {
+                                          // فقط أضف للنصوص المعروضة إذا نجحنا في الحصول على إحداثيات
+                                          controller.addPlace.add(text);
+                                          controller.controllerAddPlace.clear();
+    
+                                          // لو محتاج، تقدر تعيد حساب المسافات أو الـ total هنا
+                                          // await controller.computeAndStoreDistances(); // لو موجودة
+                                        }
+                                      },
+                                icon: loading
+                                    ? SizedBox(
+                                        width: 16,
+                                        height: 16,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 2,
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : const Icon(
+                                        Icons.add,
+                                        color: Colors.white,
+                                      ),
+                                label: loading
+                                    ? Text(
+                                        'loading_search'.tr,
+                                        style: TextStyle(color: Colors.white),
+                                      )
+                                    : Text(
+                                        'add_button'.tr,
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      controller.color.primaryColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  elevation: 0,
+                                ),
+                              );
+                            }),
                           ],
                         ),
                         SizedBox(height: 12),
@@ -450,7 +446,7 @@ class PlanTripPage extends StatelessWidget {
                                     size: 66,
                                   ),
                                   Text(
-                                    'لم تضف أي وجهة بعد',
+                                    'no_destinations_yet'.tr,
                                     style: TextStyle(
                                       color: Colors.black26,
                                       fontSize: 16,
@@ -458,7 +454,7 @@ class PlanTripPage extends StatelessWidget {
                                     ),
                                   ),
                                   Text(
-                                    'ابدأ بإضافة وجهة واحدة على الأقل   ',
+                                    'add_at_least_one_destination'.tr,
                                     style: TextStyle(
                                       color: Colors.black26,
                                       fontSize: 12,
@@ -544,12 +540,12 @@ class PlanTripPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Row(
-                      children: const [
+                      children: [
                         Icon(Icons.warning_amber_rounded, color: Colors.orange),
                         SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            'يجب تحديد نقطة البداية أولاً',
+                            'starting_point_required'.tr,
                             style: TextStyle(color: Colors.black87),
                           ),
                         ),
@@ -563,10 +559,10 @@ class PlanTripPage extends StatelessWidget {
                       controller.showSimDialog(context, car);
                     },
                     icon: const Icon(Icons.alt_route, color: Colors.white),
-                    label: const Padding(
+                    label: Padding(
                       padding: EdgeInsets.symmetric(vertical: 14.0),
                       child: Text(
-                        'إنشاء مسارك',
+                        'create_route'.tr,
                         style: TextStyle(fontSize: 16, color: Colors.white),
                       ),
                     ),
@@ -578,7 +574,7 @@ class PlanTripPage extends StatelessWidget {
                       elevation: 0,
                     ),
                   ),
-
+    
                   const SizedBox(height: 40),
                 ],
               ),

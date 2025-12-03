@@ -41,7 +41,6 @@ class NearStationPage extends StatelessWidget {
                   ),
                 ),
               ),
-
               // Tabs
               Container(
                 decoration: BoxDecoration(
