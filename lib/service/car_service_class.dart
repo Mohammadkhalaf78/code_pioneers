@@ -2,7 +2,6 @@
 //
 //     final carServiceClass = carServiceClassFromJson(jsonString);
 
-import 'package:meta/meta.dart';
 import 'dart:convert';
 
 List<CarServiceClass> carServiceClassFromJson(String str) => List<CarServiceClass>.from(json.decode(str).map((x) => CarServiceClass.fromJson(x)));
@@ -10,7 +9,7 @@ List<CarServiceClass> carServiceClassFromJson(String str) => List<CarServiceClas
 String carServiceClassToJson(List<CarServiceClass> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class CarServiceClass {
-    final int id;
+    final int? id;
     final DateTime? createdAt;
     final String carName;
     final int cc;
@@ -20,7 +19,7 @@ class CarServiceClass {
     final int literPrice;
 
     CarServiceClass({
-        required this.id,
+         this.id,
          this.createdAt,
         required this.carName,
         required this.cc,
@@ -42,7 +41,7 @@ class CarServiceClass {
     );
 
     Map<String, dynamic> toJson() => {
-        "id": id,
+        // "id": id,
         // "created_at": createdAt.toIso8601String(),
         "car_Name": carName,
         "cc": cc,

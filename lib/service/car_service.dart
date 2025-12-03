@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:code_pioneers/main.dart';
 import 'package:code_pioneers/service/car_service_class.dart';
-import 'package:get/get.dart';
 
 class CarService {
   loadCars() async {

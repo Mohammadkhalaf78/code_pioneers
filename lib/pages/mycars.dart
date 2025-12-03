@@ -1,4 +1,5 @@
 import 'package:code_pioneers/Constants/colors.dart';
+import 'package:code_pioneers/main.dart';
 import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +21,6 @@ class _MyCarsPageState extends State<MyCarsPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     controller.showCars();
   }
@@ -205,8 +205,66 @@ class _MyCarsPageState extends State<MyCarsPage> {
                                   255,
                                 ),
 
-                                onPressed: (context) {
-                                  controller.car.removeAt(index);
+                                onPressed: (context) async {
+                                  // تأكيد الحذف
+                                  final shouldDelete = await showDialog<bool>(
+                                    context: context,
+                                    builder: (ctx) => AlertDialog(
+                                      title: const Text('تأكيد الحذف'),
+                                      content: const Text(
+                                        'هل تريد حذف هذا السجل؟',
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(ctx).pop(false),
+                                          child: const Text('إلغاء'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.of(ctx).pop(true),
+                                          child: const Text('حذف'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+
+                                  if (shouldDelete != true) return;
+
+                                  final item = controller.car[index];
+
+                                  // نحول CarServiceClass → Map
+                                  Map<String, dynamic> temp = item.toJson();
+
+                                  // إزالة القيم الفارغة
+                                  temp.removeWhere((k, v) => v == null);
+
+                                  // Supabase بيقبل Map<dynamic, dynamic>
+                                  final Map<dynamic, dynamic> matchMap =
+                                      Map<dynamic, dynamic>.from(temp);
+
+                                  try {
+                                    // حذف من Supabase بالمطابقة
+                                    await cloud
+                                        .from('Cars')
+                                        .delete()
+                                        .match(matchMap.cast<String, Object>());
+
+                                    // حذف محلي بعد نجاح الحذف
+                                    controller.car.removeAt(index);
+
+                                    Get.snackbar(
+                                      'نجاح',
+                                      'تم حذف السجل بنجاح',
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
+                                  } catch (e) {
+                                    Get.snackbar(
+                                      'خطأ',
+                                      'تعذر حذف السجل\n${e.toString()}',
+                                      snackPosition: SnackPosition.BOTTOM,
+                                    );
+                                  }
                                 },
                               ),
                             ],

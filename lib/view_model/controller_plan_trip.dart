@@ -1,7 +1,5 @@
 import 'package:code_pioneers/Constants/colors.dart';
-import 'package:code_pioneers/car.dart';
 import 'package:code_pioneers/coordiantes.dart';
-import 'package:code_pioneers/service/car_service.dart';
 import 'package:code_pioneers/service/car_service_class.dart';
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';

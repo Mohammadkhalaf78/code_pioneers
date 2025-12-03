@@ -1,5 +1,4 @@
 import 'dart:ui';
-import 'package:code_pioneers/car.dart';
 import 'package:code_pioneers/service/car_service_class.dart';
 import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
