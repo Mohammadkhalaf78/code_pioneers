@@ -1,11 +1,14 @@
-// import 'package:code_pioneers/car.dart';
-// import 'package:code_pioneers/main.dart';
+import 'dart:convert';
+
+import 'package:code_pioneers/main.dart';
+import 'package:code_pioneers/service/car_service_class.dart';
+import 'package:get/get.dart';
 
 class CarService {
   loadCars() async {
-    // final result = await cloud.from('Cars').select();
-    // print(result);
-
-    // return result;
+    final result = await cloud.from('Cars').select();
+    final cars = carServiceClassFromJson(json.encode(result));
+    print(cars);
+    return cars;
   }
 }

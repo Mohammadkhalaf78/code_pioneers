@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:code_pioneers/car.dart';
+import 'package:code_pioneers/service/car_service_class.dart';
 import 'package:code_pioneers/view_model/controller_car_detials.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class BestRoutePage extends StatelessWidget {
   final controller = Get.find<ControllerPlanTrip>();
   final controllerCar = Get.find<ControllerCarDetials>();
 
-  final Car car = Get.arguments as Car;
+  final CarServiceClass car = Get.arguments as CarServiceClass;
 
   double rounded = 0;
 

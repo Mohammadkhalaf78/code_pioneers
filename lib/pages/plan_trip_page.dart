@@ -1,5 +1,6 @@
 import 'package:code_pioneers/car.dart';
 import 'package:code_pioneers/service/auth_service.dart';
+import 'package:code_pioneers/service/car_service_class.dart';
 import 'package:code_pioneers/view_model/controller_plan_trip.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,16 +9,9 @@ class PlanTripPage extends StatelessWidget {
   PlanTripPage({super.key});
   final authService = AuthService();
 
-  final Car car =
+  final CarServiceClass car =
       Get.arguments ??
-      Car(
-        carName: 'افتراضي',
-        year: 2000,
-        cc: 1600,
-        cylinders: 4,
-        carOdometer: 12350,
-        literPrice: 19,
-      );
+      CarServiceClass(id: 9999,  carName: 'افتراضي', cc: 1600, cylinders: 4, carOdometer: 23094, year: 2000, literPrice: 19);
   final controller = Get.find<ControllerPlanTrip>();
 
   @override

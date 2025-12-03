@@ -1,4 +1,5 @@
-import 'package:code_pioneers/car.dart';
+import 'package:code_pioneers/service/car_service.dart';
+import 'package:code_pioneers/service/car_service_class.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,14 +15,14 @@ class ControllerCarDetials extends GetxController {
   final carName = TextEditingController();
   final yearController = TextEditingController();
   final mileageController = TextEditingController();
-  final car = <Car>[].obs;
+  final car = <CarServiceClass>[].obs;
 
   double oilPriceKm = 0;
   double gasolineCost = 0;
   // تكلفة البنزين
 
   // ---------------------------------------------------------
-  double fuelConsumption(Car car) {
+  double fuelConsumption(CarServiceClass car) {
     double liter;
 
     double literPrice = double.tryParse(this.literPrice.text) ?? 19.0;
@@ -60,7 +61,7 @@ class ControllerCarDetials extends GetxController {
   }
 
   //  ---------------------------------------------------------
-  calculate(Car car) {
+  calculate(CarServiceClass car) {
     double totalCostPerKm = fuelConsumption( car ) + maintanaceCost();
     return totalCostPerKm;
   }
@@ -320,18 +321,18 @@ class ControllerCarDetials extends GetxController {
                                   return;
                                 }
 
-                                car.add(
-                                  Car(
-                                    literPrice: int.parse(literPrice.text),
-                                    carName: carName.text,
-                                    year: int.parse(yearController.text),
-                                    cc: int.parse(ccController.text),
-                                    cylinders: int.parse(cylinders.text),
-                                    carOdometer: int.parse(
-                                      mileageController.text,
-                                    ),
-                                  ),
-                                );
+                                // car.add(
+                                //   Car(
+                                //     literPrice: int.parse(literPrice.text),
+                                //     carName: carName.text,
+                                //     year: int.parse(yearController.text),
+                                //     cc: int.parse(ccController.text),
+                                //     cylinders: int.parse(cylinders.text),
+                                //     carOdometer: int.parse(
+                                //       mileageController.text,
+                                //     ),
+                                //   ),
+                                // );
                                 carName.clear();
                                 yearController.clear();
                                 ccController.clear();
@@ -367,6 +368,10 @@ class ControllerCarDetials extends GetxController {
         );
       },
     );
+  }
+    showCars() async {
+    final resulet = await CarService().loadCars();
+    car.value = resulet;
   }
 }
 

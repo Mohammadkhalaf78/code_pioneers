@@ -22,7 +22,7 @@ class _MyCarsPageState extends State<MyCarsPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controllerPlanTrip.showCars();
+    controller.showCars();
   }
 
   @override
@@ -119,7 +119,6 @@ class _MyCarsPageState extends State<MyCarsPage> {
                     ),
                   ),
                 ),
-            
 
                 Positioned.fill(
                   top: 140,
